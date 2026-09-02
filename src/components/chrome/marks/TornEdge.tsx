@@ -51,6 +51,13 @@ export function TornEdge({ variant, side = 'bottom', className }: Props) {
         display: 'block',
         width: '100%',
         height: TORN_EDGE_HEIGHT,
+        // Tuck the strip a pixel under its panel. The mask's straight edge
+        // sits exactly on the element's boundary, and on a fractional device
+        // pixel ratio the browser antialiases that row to about half alpha —
+        // which shows as a hairline of the ground colour across the full
+        // width, a few pixels above the tear. The panel's own paper covers it.
+        marginTop: side === 'bottom' ? -1 : undefined,
+        marginBottom: side === 'top' ? -1 : undefined,
         background: 'currentColor',
         maskImage: mask,
         WebkitMaskImage: mask,
