@@ -44,6 +44,15 @@
   --gutter: clamp(0.75rem, 1.6vw, 1.5rem);
   --measure: 105rem;
 
+  /* The contact sheet. Frame height is the only free value — the width
+     follows at 16:10, the pitch is height plus caption plus gap, and the
+     loupe is one whole frame plus a bleed on every side. Sized so three
+     frames and part of a fourth are in the sheet at once: fewer reads as a
+     slideshow, more and the frames are too small to be worth magnifying. */
+  --frame-h: clamp(7rem, 19vh, 11rem);
+  --frame-gap: clamp(0.75rem, 2vh, 1.25rem);
+  --lens-bleed: 12px;
+
   /* Print defects. One offset and one angle, reused everywhere: a single
      repeated value reads as a press fault, varied ones read as noise. */
   --slip: 6px;

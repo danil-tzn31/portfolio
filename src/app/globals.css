@@ -67,8 +67,10 @@
     color: var(--ink);
   }
 
+  /* currentColor rather than a fixed value: the page alternates ink and paper
+     grounds, and a white ring is invisible on half of them. */
   :focus-visible {
-    outline: 2px solid var(--paper-hi);
+    outline: 2px solid currentColor;
     outline-offset: 3px;
   }
 }
@@ -267,6 +269,240 @@ html.is-loading body {
 @keyframes paper-feed {
   to {
     background-position-y: 12px;
+  }
+}
+
+/* Projects.
+   Written as CSS rather than utilities because the pinned two-column layout
+   and the stacked one are two different structures, not one structure with
+   different numbers. The stacked version is the default and needs no
+   JavaScript; the sheet, the loupe and the scan bar only exist where they can
+   work — a wide screen, and motion allowed. */
+
+.projects__grid {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.projects__sheet-col {
+  display: none;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 9vh, 6rem);
+}
+
+.scan-band {
+  display: none;
+}
+
+/* The strip. Its width is set by the frame height — the plate is 16:10, so
+   fixing the height fixes everything else and the pitch stays measurable. */
+.sheet {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: calc(var(--frame-h) * 1.6 + 68px);
+  overflow: hidden;
+}
+
+.sheet__sprockets {
+  opacity: 0.5;
+}
+
+.sheet__strip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--frame-gap);
+  padding-top: var(--strip-pad, 0px);
+  /* Wide enough that the sprockets are a margin rather than a fourth line
+     crowding the loupe's edge. */
+  padding-inline: 34px;
+}
+
+.sheet__frame {
+  display: block;
+}
+
+/* Not quite full strength: the strip is a proof sheet, and holding it a
+   little off black keeps it behind the panel it feeds rather than competing
+   with it. */
+.sheet__frame img {
+  opacity: 0.92;
+}
+
+.sheet__plate {
+  position: relative;
+  display: block;
+  height: var(--frame-h);
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+
+.sheet__n {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2px 5px;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.sheet__caption {
+  display: block;
+  margin-top: 6px;
+  color: var(--paper-soft);
+}
+
+.sheet__frame.is-active .sheet__caption {
+  color: var(--ink);
+}
+
+/* The glass. A clipped second copy of the strip, not a filter — so the dots
+   themselves get bigger, which is what a loupe on a contact sheet does. The
+   clip is zero-area until the geometry has been measured. */
+.sheet__lens,
+.sheet__loupe {
+  display: none;
+}
+
+.sheet.is-measured .sheet__lens {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+  clip-path: inset(
+    var(--lens-top)
+    calc(100% - var(--lens-left) - var(--lens-w))
+    calc(100% - var(--lens-top) - var(--lens-h))
+    var(--lens-left)
+  );
+}
+
+/* Nearest-neighbour under the glass. Magnifying a printed screen shows hard
+   dot edges; interpolating them would show a softer version of the same
+   picture, which is the one thing a magnifier must not do. */
+.sheet__strip--ghost img {
+  image-rendering: pixelated;
+}
+
+/* Under the glass the loupe's own outline is the frame edge. The copy's
+   border and number plate would sit a few pixels inside it, and three
+   hairlines within six pixels of each other read as a printing fault rather
+   than as a magnifier. */
+.sheet__strip--ghost .sheet__plate {
+  border: none;
+}
+
+.sheet__strip--ghost .sheet__n,
+.sheet__strip--ghost .sheet__caption {
+  visibility: hidden;
+}
+
+.sheet.is-measured .sheet__loupe {
+  display: block;
+  position: absolute;
+  top: var(--lens-top);
+  left: var(--lens-left);
+  width: var(--lens-w);
+  height: var(--lens-h);
+  color: var(--ink);
+  pointer-events: none;
+}
+
+.sheet__loupe::before,
+.sheet__loupe::after {
+  content: '';
+  position: absolute;
+  border: 1px solid currentColor;
+}
+
+.sheet__loupe::after {
+  inset: 0;
+}
+
+/* The section's misregistration: the two outlines are not concentric. The
+   offset one is faint — at full strength it stops being a plate out of
+   register and becomes a second box. */
+.sheet__loupe::before {
+  inset: calc(var(--slip) * -1) var(--slip) var(--slip) calc(var(--slip) * -1);
+  opacity: 0.3;
+}
+
+.chart__bar {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+/* Stacked: nothing is competing for a fixed height, so the image takes a
+   share of the width instead of what the panel has left over. */
+@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+  .detail__media {
+    flex: none;
+    height: clamp(11rem, 42vw, 22rem);
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .projects__stage {
+    height: 100svh;
+  }
+
+  /* The strip has an intrinsic width — the frame height times sixteen tenths,
+     plus its sprockets — so it gets a column that size rather than a share of
+     twelve. Fitting it into a twelve-column grid left a third of the left
+     column empty, which read as a hole in the spread rather than as margin.
+
+     minmax(0, 1fr) on the row rather than the default auto: an auto row is
+     sized by its tallest item, so the panel would grow to fit its own content
+     and push the foot of the longest project off the pinned sheet instead of
+     being told how much room it has. */
+  .projects__grid {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .projects__sheet-col {
+    display: flex;
+    min-height: 0;
+  }
+
+  .projects__detail-col {
+    min-height: 0;
+  }
+
+  /* Four panels in one cell, each the full height of it, only one visible. */
+  .detail {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    gap: 0;
+    min-height: 0;
+  }
+
+  .detail__panel {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .detail__panel:first-child {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .scan-band {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: var(--ink);
+    transform: scaleX(0);
   }
 }
 
