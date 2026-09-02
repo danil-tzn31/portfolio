@@ -18,7 +18,7 @@ export const projects: readonly Project[] = [
   {
     n: '01',
     slug: 'ARTMS',
-    title: 'Virtual Angel Archive',
+    title: 'ARTMS Fan Website',
     year: '2026',
     plain: 'A fan-made archive for the group ARTMS, built as one long scroll through three eras.',
     does: [
