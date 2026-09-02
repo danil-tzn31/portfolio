@@ -125,6 +125,16 @@
   text-transform: uppercase;
 }
 
+@utility type-meta-lg {
+  font-family: var(--font-montreal-text), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: var(--fs-meta-lg);
+  line-height: var(--lh-meta);
+  letter-spacing: var(--tr-meta);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 @utility type-lead {
   font-family: var(--font-eiko), Georgia, serif;
   font-weight: 500;
@@ -267,5 +277,23 @@ html.is-loading body {
   .grain,
   .paper-feed {
     animation: none;
+  }
+
+  /* No loop runs, so a single overflowing strip would cut the list off at the
+     viewport edge. Wrap it instead and show every item once. Done in CSS
+     rather than a JS branch so the server and client render the same markup. */
+  .marquee {
+    overflow: visible;
+  }
+
+  .marquee > div {
+    width: auto;
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+    padding-inline: var(--page-margin);
+  }
+
+  .marquee__item--dup {
+    display: none;
   }
 }
