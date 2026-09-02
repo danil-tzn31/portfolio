@@ -453,11 +453,97 @@ html.is-loading body {
 
 /* Stacked: nothing is competing for a fixed height, so the image takes a
    share of the width instead of what the panel has left over. */
+/* Stacked: four sheets scrolled past, with the contact sheet as their index. */
 @media (max-width: 1023px), (prefers-reduced-motion: reduce) {
   .detail__media {
     flex: none;
     height: clamp(11rem, 42vw, 22rem);
   }
+
+  /* The counter is the only thing saying which of four you are reading, so it
+     travels with you. */
+  .projects__head {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    padding-block: 0.75rem;
+    background: var(--paper);
+  }
+
+  .projects__index {
+    margin-top: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  .index {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gutter) var(--gutter);
+  }
+
+  .index__plate {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+  }
+
+  .index__plate img {
+    opacity: 0.92;
+  }
+
+  /* The sheet you are reading is the one that is printed; the rest sit back.
+     A moving outline would be a second box, which is the mistake the desktop
+     loupe already made once. */
+  .index__cell {
+    display: block;
+    opacity: 0.45;
+    transition: opacity 0.25s;
+  }
+
+  .index__cell.is-active {
+    opacity: 1;
+  }
+
+  .index__cell.is-active .sheet__caption {
+    color: var(--ink);
+  }
+
+  /* Each project is its own screen, entered rather than swapped. */
+  .detail__panel {
+    position: relative;
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    justify-content: center;
+    /* Clear of the sticky head when jumped to from the index. */
+    scroll-margin-top: 4rem;
+  }
+
+  /* Uncovered by default, and covered by the entry timeline the moment it is
+     built. A band that starts opaque would hide every sheet on a page whose
+     JavaScript never arrives. */
+  .scan-band--sheet {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: var(--ink);
+    transform: scaleX(0);
+  }
+
+  /* Thumb-sized targets. The links are small type by design; the tap area
+     does not have to be. */
+  .detail__panel a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+}
+
+.projects__index {
+  display: block;
 }
 
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
@@ -478,6 +564,10 @@ html.is-loading body {
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
     column-gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .projects__index {
+    display: none;
   }
 
   .projects__sheet-col {
@@ -528,6 +618,11 @@ html.is-loading body {
   .grain,
   .paper-feed {
     animation: none;
+  }
+
+  /* No entry animation runs, so there is nothing for the band to uncover. */
+  .scan-band--sheet {
+    display: none;
   }
 
   /* No loop runs, so a single overflowing strip would cut the list off at the

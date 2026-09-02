@@ -12,8 +12,8 @@ import { D, E } from '@/lib/motion';
  * projects at once, which is the one thing a contact sheet never does. This
  * covers, cuts, and uncovers — the same edit the rest of the site makes.
  */
-export function ScanBand({ ref }: { ref?: Ref<HTMLSpanElement> }) {
-  return <span ref={ref} aria-hidden="true" className="scan-band" />;
+export function ScanBand({ ref, className = '' }: { ref?: Ref<HTMLSpanElement>; className?: string }) {
+  return <span ref={ref} aria-hidden="true" className={`scan-band ${className}`.trim()} />;
 }
 
 /**
