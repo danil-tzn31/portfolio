@@ -137,6 +137,7 @@
   font-weight: 500;
   font-size: var(--fs-body);
   line-height: var(--lh-body);
+  text-wrap: pretty;
 }
 
 @utility type-quote {
@@ -144,6 +145,7 @@
   font-weight: 500;
   font-size: var(--fs-quote);
   line-height: var(--lh-quote);
+  text-wrap: pretty;
 }
 
 /* Grain. Four fixed offsets at 8fps: enough to read as film, cheap enough
