@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "grain": "node scripts/make-grain.mjs"
+    "grain": "node scripts/make-grain.mjs",
+    "media": "node scripts/process-media.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
