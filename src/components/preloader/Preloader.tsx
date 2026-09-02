@@ -43,6 +43,15 @@ export function Preloader({ wordmark }: { wordmark: RefObject<HTMLHeadingElement
       if (!heading) return;
 
       const root = document.documentElement;
+
+      // Browsers restore the scroll position on reload. The curtain is
+      // absolute inside the hero, so a restored mid-page position leaves the
+      // visitor looking at the middle of the site, frozen by the scroll lock,
+      // while the entry plays off-screen above them. Go to the top first —
+      // and before the lock, which would otherwise stop the scroll landing.
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+
       // The Lenis instance does not exist yet — SmoothScroll sits after
       // {children} in the layout, so its effect runs after this one. A class
       // on <html> is the lock, and it is the same mechanism lenis.stop() uses.
