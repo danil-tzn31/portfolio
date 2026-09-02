@@ -9,11 +9,13 @@ import { prefersReducedMotion } from '@/lib/reduced-motion';
 const FONT_TIMEOUT = 900;
 const FAILSAFE = 6;
 
-// Two seconds: the last letter is delayed 0.78 and takes 0.62 to land, then a
-// beat, then the curtain rises for half a second.
-const CHAR_DURATION = 0.62;
-const HOLD = 0.16;
-const CURTAIN = 0.5;
+// Three seconds: the last letter is delayed 1.05 and takes 0.70 to land, then
+// a beat, then the curtain takes most of a second to clear the screen. The
+// curtain is the slowest thing here on purpose — it is the only moment the
+// page is uncovered, and it should read as heavy rather than as a wipe.
+const CHAR_DURATION = 0.7;
+const HOLD = 0.3;
+const CURTAIN = 0.95;
 const CURTAIN_AT = Math.max(...CHAR_ENTRY.map((entry) => entry.d)) + CHAR_DURATION + HOLD;
 
 /**
@@ -157,7 +159,7 @@ export function Preloader({ wordmark }: { wordmark: RefObject<HTMLHeadingElement
           {
             progress: 1,
             duration: CURTAIN,
-            ease: E.inOut,
+            ease: E.even,
             onUpdate: () => {
               gsap.set(panel.current, { yPercent: -100 * rise.progress });
               const edge = (1 - rise.progress) * window.innerHeight;
