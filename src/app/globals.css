@@ -160,6 +160,23 @@
   }
 }
 
+/* Lenis adds these classes to <html> itself. Taken from lenis/dist/lenis.css,
+   trimmed to the three rules this site actually uses — the last one is what
+   makes lenis.stop() a real scroll lock, so the preloader does not need to
+   touch overflow directly. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
 /* Ink bleed is gated on a class the preloader adds when it finishes, so the
    filter can never delay the first paint of the wordmark. */
 .printed .ink-bleed {

@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import { Grain } from '@/components/chrome/Grain';
 import { GridOverlay } from '@/components/chrome/GridOverlay';
 import { PrintDefs } from '@/components/chrome/marks/PrintDefs';
+import { SmoothScroll } from '@/lib/smooth-scroll';
 import './globals.css';
 
 const montreal = localFont({
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang="en" className={`${montreal.variable} ${montrealText.variable} ${eiko.variable}`}>
       <body>
         {children}
+        <SmoothScroll />
         <Grain />
         <PrintDefs />
         {process.env.NODE_ENV === 'development' && <GridOverlay />}
