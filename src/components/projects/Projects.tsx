@@ -45,6 +45,7 @@ export function Projects() {
         const strip = q('.sheet__strip:not(.sheet__strip--ghost)')[0];
         const ghost = q('.sheet__strip--ghost')[0];
         const counter = q('.projects__counter')[0];
+        const loupeN = q('.sheet__loupe-n')[0];
         const panels = q('.detail__panel');
         const frames = q('.sheet__strip:not(.sheet__strip--ghost) .sheet__frame');
         const bar = band.current;
@@ -60,23 +61,30 @@ export function Projects() {
 
         const measure = () => {
           const frame = frames[0];
-          if (!frame) return;
+          // The glass goes over the picture, not over the picture and its
+          // caption. Measuring the whole frame makes the bleed below the image
+          // as deep as the caption is tall, and the loupe stops being square
+          // about what it is magnifying.
+          const plate = frame?.querySelector<HTMLElement>('.sheet__plate');
+          if (!frame || !plate) return;
 
           const bleed = parseFloat(getComputedStyle(sheet).getPropertyValue('--lens-bleed')) || 0;
-          const frameH = frame.offsetHeight;
+          const plateH = plate.offsetHeight;
           pitch = frames[1].offsetTop - frame.offsetTop;
 
-          const lensH = frameH + bleed * 2;
-          const lensW = frame.offsetWidth + bleed * 2;
-          const lensLeft = frame.offsetLeft - bleed;
+          const lensH = plateH + bleed * 2;
+          const lensW = plate.offsetWidth + bleed * 2;
+          const lensLeft = plate.offsetLeft - bleed;
           const centre = sheet.clientHeight * LENS_AT;
 
           sheet.style.setProperty('--lens-top', `${centre - lensH / 2}px`);
           sheet.style.setProperty('--lens-h', `${lensH}px`);
           sheet.style.setProperty('--lens-left', `${lensLeft}px`);
           sheet.style.setProperty('--lens-w', `${lensW}px`);
-          // Frame 01 starts centred under the glass.
-          sheet.style.setProperty('--strip-pad', `${centre - frameH / 2}px`);
+          // Picture 01 starts centred under the glass. The plate sits at the
+          // top of its frame, so padding the strip by half a plate puts it
+          // there.
+          sheet.style.setProperty('--strip-pad', `${centre - plateH / 2}px`);
 
           // Scaling about the centre of the lens is what keeps the copy in
           // register with the original: every other origin makes the two
@@ -114,6 +122,7 @@ export function Projects() {
           gsap.set(panels[i], { autoAlpha: 1 });
           frames.forEach((frame, k) => frame.classList.toggle('is-active', k === i));
           if (counter) counter.textContent = projects[i].n;
+          if (loupeN) loupeN.textContent = projects[i].n;
           resolve(panels[i]);
         };
 

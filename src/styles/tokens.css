@@ -51,7 +51,10 @@
      slideshow, more and the frames are too small to be worth magnifying. */
   --frame-h: clamp(7rem, 19vh, 11rem);
   --frame-gap: clamp(0.75rem, 2vh, 1.25rem);
-  --lens-bleed: 12px;
+  /* The glass sits exactly on the frame. Any bleed at all makes the frame
+     under the loupe wider than the three above and below it, and a strip
+     whose edges do not line up reads as a mistake rather than as a magnifier. */
+  --lens-bleed: 0px;
 
   /* Print defects. One offset and one angle, reused everywhere: a single
      repeated value reads as a press fault, varied ones read as noise. */

@@ -355,7 +355,7 @@ html.is-loading body {
 
 .sheet__caption {
   display: block;
-  margin-top: 6px;
+  margin-top: 8px;
   color: var(--paper-soft);
 }
 
@@ -426,12 +426,24 @@ html.is-loading body {
   inset: 0;
 }
 
-/* The section's misregistration: the two outlines are not concentric. The
-   offset one is faint — at full strength it stops being a plate out of
-   register and becomes a second box. */
+/* The glass is one line sitting exactly on the frame's own border, with the
+   trim marks the rest of the site uses at its corners. An offset second
+   outline was tried here and read as a plate out of register rather than as a
+   magnifier — with the box aligned to the frame, the only thing that should
+   differ inside it is the size of the dots. */
 .sheet__loupe::before {
-  inset: calc(var(--slip) * -1) var(--slip) var(--slip) calc(var(--slip) * -1);
-  opacity: 0.3;
+  inset: -5px;
+  border-color: transparent;
+  background:
+    linear-gradient(currentColor, currentColor) 0 0 / 11px 1px,
+    linear-gradient(currentColor, currentColor) 0 0 / 1px 11px,
+    linear-gradient(currentColor, currentColor) 100% 0 / 11px 1px,
+    linear-gradient(currentColor, currentColor) 100% 0 / 1px 11px,
+    linear-gradient(currentColor, currentColor) 0 100% / 11px 1px,
+    linear-gradient(currentColor, currentColor) 0 100% / 1px 11px,
+    linear-gradient(currentColor, currentColor) 100% 100% / 11px 1px,
+    linear-gradient(currentColor, currentColor) 100% 100% / 1px 11px;
+  background-repeat: no-repeat;
 }
 
 .chart__bar {

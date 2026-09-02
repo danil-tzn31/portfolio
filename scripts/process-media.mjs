@@ -32,20 +32,27 @@ const SCREEN_CELL = 2;
  * still land near one CSS pixel outside the glass.
  */
 const THUMB_WIDTH = 560;
-const THUMB_CELL = 3;
+const THUMB_CELL = 2;
+
+/** Levels going into the detail screen, as [multiply, add]. */
+const SCREEN_LEVELS = [1.25, -22];
 
 /**
- * Levels going into the screen, as [multiply, add].
+ * The thumbnails are exposed rather than filtered.
  *
- * The detail plate is shown once and resolves away, so it can afford the hard
- * curve. The thumbnails sit on the page the whole time the section is held,
- * and the same curve there turns a photograph into static: crushing the
- * midtones means almost every cell crosses its threshold, so the dither has
- * nothing left to describe. Lifting instead of crushing keeps the light half
- * of the picture as paper and leaves the dots to draw the shape.
+ * One fixed curve cannot serve four sources: a bright photograph and a
+ * near-black interface put wildly different amounts of ink on the page, and
+ * the contact sheet shows all four at once, so the difference reads as three
+ * of them being wrong. Worse, a dark source under a hard curve crosses almost
+ * every threshold and the dither stops describing anything — it becomes
+ * static.
+ *
+ * So each thumbnail gets its own exposure, chosen to land the same proportion
+ * of the frame in ink. That is what you would do printing a contact sheet, and
+ * it is the only way four unrelated screenshots sit together as a set.
  */
-const SCREEN_LEVELS = [1.25, -22];
-const THUMB_LEVELS = [1.0, 26];
+const THUMB_INK = 0.44;
+const THUMB_CONTRAST = 0.9;
 
 const BAYER = [
   [0, 32, 8, 40, 2, 34, 10, 42],
@@ -67,26 +74,45 @@ const BAYER = [
  * that, and a one-pixel cell aliases straight into grey mush with moiré
  * banding under the browser's downscale. Two pixels survives it.
  */
-async function screen(source, width, cell, [multiply, add]) {
-  const { data, info } = await sharp(source)
-    .resize({ width })
-    .greyscale()
-    .linear(multiply, add)
-    .raw()
-    .toBuffer({ resolveWithObject: true });
+async function grey(source, width, [multiply, add]) {
+  return sharp(source).resize({ width }).greyscale().linear(multiply, add).raw().toBuffer({
+    resolveWithObject: true,
+  });
+}
 
+function dither({ data, info }, cell, lift = 0) {
   const pixels = Buffer.alloc(info.width * info.height);
+  let ink = 0;
 
   for (let y = 0; y < info.height; y++) {
     for (let x = 0; x < info.width; x++) {
       const i = y * info.width + x;
       const threshold = BAYER[((y / cell) | 0) & 7][((x / cell) | 0) & 7];
-      pixels[i] = data[i * info.channels] > ((threshold + 0.5) / 64) * 255 ? 255 : 0;
+      const lit = data[i * info.channels] + lift > ((threshold + 0.5) / 64) * 255;
+      pixels[i] = lit ? 255 : 0;
+      if (!lit) ink++;
     }
   }
 
-  return sharp(pixels, { raw: { width: info.width, height: info.height, channels: 1 } });
+  return { pixels, info, ink: ink / (info.width * info.height) };
 }
+
+/** The exposure that lands `target` of the frame in ink, to within a percent. */
+function expose(plate, cell, target) {
+  let low = -60;
+  let high = 200;
+
+  for (let i = 0; i < 12; i++) {
+    const mid = (low + high) / 2;
+    if (dither(plate, cell, mid).ink > target) low = mid;
+    else high = mid;
+  }
+
+  return dither(plate, cell, (low + high) / 2);
+}
+
+const toSharp = ({ pixels, info }) =>
+  sharp(pixels, { raw: { width: info.width, height: info.height, channels: 1 } });
 
 const write1Bit = (image, file) =>
   // Lossless, and PNG rather than AVIF: a 1-bit image is nothing but hard
@@ -114,16 +140,15 @@ for (const file of sources) {
     .toFile(path.join(OUT, `${name}.avif`));
 
   const halftone = await write1Bit(
-    await screen(source, SCREEN_WIDTH, SCREEN_CELL, SCREEN_LEVELS),
+    toSharp(dither(await grey(source, SCREEN_WIDTH, SCREEN_LEVELS), SCREEN_CELL)),
     path.join(OUT, `${name}-halftone.png`),
   );
 
-  const thumb = await write1Bit(
-    await screen(source, THUMB_WIDTH, THUMB_CELL, THUMB_LEVELS),
-    path.join(OUT, `${name}-thumb.png`),
-  );
+  const exposed = expose(await grey(source, THUMB_WIDTH, [THUMB_CONTRAST, 0]), THUMB_CELL, THUMB_INK);
+  const thumb = await write1Bit(toSharp(exposed), path.join(OUT, `${name}-thumb.png`));
 
   console.log(
-    `${name.padEnd(10)} plate ${kb(plate.size)}   halftone ${kb(halftone.size)}   thumb ${kb(thumb.size)}`,
+    `${name.padEnd(10)} plate ${kb(plate.size)}   halftone ${kb(halftone.size)}   ` +
+      `thumb ${kb(thumb.size)} at ${(exposed.ink * 100).toFixed(0)}% ink`,
   );
 }

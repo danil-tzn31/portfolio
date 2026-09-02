@@ -90,10 +90,12 @@ export function ContactSheet() {
         <Strip ghost />
       </div>
 
-      {/* Two hairlines slightly out of register, and nothing else. Corner
-          ticks here as well put four line systems within a few pixels of each
-          other, which reads as a printing fault rather than as a magnifier. */}
-      <div className="sheet__loupe" aria-hidden="true" />
+      {/* The glass carries the frame number, because it is covering the one
+          the strip drew. It sits in exactly the same place, so the number does
+          not appear to go missing when the loupe reaches a frame. */}
+      <div className="sheet__loupe" aria-hidden="true">
+        <span className="sheet__n sheet__loupe-n type-meta" />
+      </div>
     </div>
   );
 }
