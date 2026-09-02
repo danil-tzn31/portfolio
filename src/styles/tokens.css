@@ -1,0 +1,39 @@
+:root {
+  /* Colour. Five values, no sixth. */
+  --ink: #0b0b0b;
+  --paper: #edeae3;
+  --paper-hi: #ffffff;
+  --ink-soft: #3a3a3a;
+  --paper-soft: #a8a49b;
+
+  /* Type scale */
+  --fs-meta: 0.6875rem;
+  --fs-meta-lg: 0.8125rem;
+  --fs-body: clamp(1.0625rem, 0.95rem + 0.5vw, 1.375rem);
+  --fs-lead: clamp(1.375rem, 1.1rem + 1.2vw, 2rem);
+  --fs-quote: clamp(1.75rem, 1.2rem + 2.6vw, 3.25rem);
+  --fs-title: clamp(2.5rem, 1.4rem + 5.2vw, 6rem);
+  --fs-display: clamp(3.5rem, 0.5rem + 13vw, 15rem);
+
+  /* Tracking */
+  --tr-meta: 0.16em;
+  --tr-title: -0.02em;
+  --tr-display: -0.035em;
+
+  /* Leading */
+  --lh-meta: 1.2;
+  --lh-body: 1.55;
+  --lh-quote: 1.05;
+  --lh-title: 0.9;
+  --lh-display: 0.84;
+
+  /* Grid */
+  --page-margin: clamp(1rem, 4vw, 3.5rem);
+  --gutter: clamp(0.75rem, 1.6vw, 1.5rem);
+  --measure: 105rem;
+
+  /* Print defects. One offset and one angle, reused everywhere: a single
+     repeated value reads as a press fault, varied ones read as noise. */
+  --slip: 6px;
+  --tilt: 1.4deg;
+}

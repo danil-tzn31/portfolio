@@ -1,11 +1,173 @@
 @import 'tailwindcss';
+@import '../styles/tokens.css';
 
-html,
-body {
-  height: 100%;
+@theme inline {
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-paper-hi: var(--paper-hi);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper-soft: var(--paper-soft);
+
+  --font-display: var(--font-montreal);
+  --font-meta: var(--font-montreal-text);
+  --font-editorial: var(--font-eiko);
+
+  --text-meta: var(--fs-meta);
+  --text-meta-lg: var(--fs-meta-lg);
+  --text-body: var(--fs-body);
+  --text-lead: var(--fs-lead);
+  --text-quote: var(--fs-quote);
+  --text-title: var(--fs-title);
+  --text-display: var(--fs-display);
+
+  --tracking-meta: var(--tr-meta);
+  --tracking-title: var(--tr-title);
+  --tracking-display: var(--tr-display);
 }
 
-body {
-  background: #0b0b0b;
-  color: #edeae3;
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-eiko), Georgia, serif;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    cursor: crosshair;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--paper-hi);
+    outline-offset: 3px;
+  }
+}
+
+/* Type roles. Named rather than composed from utilities at every call site,
+   because the same five roles repeat on every section. */
+@utility type-display {
+  font-family: var(--font-montreal), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tr-display);
+}
+
+@utility type-hairline {
+  font-family: var(--font-montreal), system-ui, sans-serif;
+  font-weight: 100;
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tr-display);
+}
+
+@utility type-title {
+  font-family: var(--font-montreal), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tr-title);
+}
+
+@utility type-sub {
+  font-family: var(--font-montreal), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: var(--fs-lead);
+  line-height: 1.15;
+  letter-spacing: var(--tr-title);
+}
+
+@utility type-meta {
+  font-family: var(--font-montreal-text), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: var(--fs-meta);
+  line-height: var(--lh-meta);
+  letter-spacing: var(--tr-meta);
+  text-transform: uppercase;
+}
+
+@utility type-editorial {
+  font-family: var(--font-eiko), Georgia, serif;
+  font-weight: 500;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+@utility type-quote {
+  font-family: var(--font-eiko), Georgia, serif;
+  font-weight: 500;
+  font-size: var(--fs-quote);
+  line-height: var(--lh-quote);
+}
+
+/* Grain. Four fixed offsets at 8fps: enough to read as film, cheap enough
+   to composite. The tile itself stays under reduced motion; only the
+   flicker goes. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  background-image: url('/grain.png');
+  background-repeat: repeat;
+  opacity: 0.55;
+  mix-blend-mode: overlay;
+  animation: grain-shift 0.5s steps(1) infinite;
+}
+
+@keyframes grain-shift {
+  0% {
+    background-position: 0 0;
+  }
+  25% {
+    background-position: -34px 22px;
+  }
+  50% {
+    background-position: 41px -17px;
+  }
+  75% {
+    background-position: -18px -39px;
+  }
+}
+
+/* Ink bleed is gated on a class the preloader adds when it finishes, so the
+   filter can never delay the first paint of the wordmark. */
+.printed .ink-bleed {
+  filter: url('#ink-bleed');
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    animation: none;
+  }
 }
