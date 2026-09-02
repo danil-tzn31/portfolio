@@ -23,7 +23,9 @@ export type StackRow = {
 export const stack: readonly StackRow[] = [
   {
     label: 'Languages & Data',
-    speed: 0.55,
+    // Speeds are px per second, so bigger items travel a smaller share of
+    // their own width per second. Scaled up with the type.
+    speed: 0.9,
     direction: 'left',
     items: [
       { label: 'Python', mark: 'python' },
@@ -44,7 +46,7 @@ export const stack: readonly StackRow[] = [
   },
   {
     label: 'Web',
-    speed: 0.85,
+    speed: 1.4,
     direction: 'right',
     items: [
       { label: 'HTML', mark: 'html5' },
@@ -65,7 +67,7 @@ export const stack: readonly StackRow[] = [
   },
   {
     label: 'Systems & Tools',
-    speed: 0.4,
+    speed: 0.7,
     direction: 'left',
     items: [
       { label: 'Docker', mark: 'docker' },

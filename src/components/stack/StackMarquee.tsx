@@ -103,13 +103,19 @@ export function StackMarquee() {
   );
 
   return (
-    <section ref={scope} id="stack" className="pt-[clamp(3rem,10vh,7rem)]">
-      <div className="bg-paper text-ink">
-        <div className="mx-auto max-w-[var(--measure)] px-[var(--page-margin)] pt-[clamp(3rem,9vh,6rem)]">
+    <section
+      ref={scope}
+      id="stack"
+      className="flex min-h-[100svh] flex-col pt-[clamp(3rem,10vh,7rem)]"
+    >
+      <div className="flex flex-1 flex-col bg-paper text-ink">
+        <div className="mx-auto w-full max-w-[var(--measure)] px-[var(--page-margin)] pt-[clamp(3rem,9vh,6rem)]">
           <SectionLabel n="03">Tech Stack</SectionLabel>
         </div>
 
-        <div className="space-y-[clamp(2rem,5vh,3.5rem)] pt-[clamp(2.5rem,6vh,4rem)] pb-[clamp(3rem,9vh,6rem)]">
+        {/* The label holds the top; the rows take the rest of the sheet and
+            sit in the middle of it. */}
+        <div className="flex flex-1 flex-col justify-center space-y-[clamp(2.5rem,7vh,5rem)] py-[clamp(2rem,6vh,4rem)]">
           {stack.map((row, i) => (
             <MarqueeRow
               key={row.label}

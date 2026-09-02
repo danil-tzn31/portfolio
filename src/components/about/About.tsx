@@ -90,9 +90,13 @@ export function About() {
   );
 
   return (
-    <section ref={scope} id="about" className="pt-[clamp(3rem,10vh,7rem)]">
-      <div className="bg-paper text-ink">
-        <div className="mx-auto max-w-[var(--measure)] px-[var(--page-margin)] py-[clamp(3rem,9vh,6rem)]">
+    <section
+      ref={scope}
+      id="about"
+      className="flex min-h-[100svh] flex-col pt-[clamp(3rem,10vh,7rem)]"
+    >
+      <div className="flex flex-1 flex-col justify-center bg-paper text-ink">
+        <div className="mx-auto w-full max-w-[var(--measure)] px-[var(--page-margin)] py-[clamp(3rem,9vh,6rem)]">
           <SectionLabel n="02">About</SectionLabel>
 
           <div className="mt-[clamp(2.5rem,6vh,4.5rem)] grid gap-[clamp(2.5rem,6vh,4rem)] lg:grid-cols-12 lg:gap-[var(--gutter)]">

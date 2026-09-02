@@ -125,12 +125,15 @@
   text-transform: uppercase;
 }
 
-@utility type-meta-lg {
-  font-family: var(--font-montreal-text), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: var(--fs-meta-lg);
-  line-height: var(--lh-meta);
-  letter-spacing: var(--tr-meta);
+/* Marquee items. Semibold from the display family rather than the text cut:
+   at this size Montreal Text is no longer a label, and --tr-meta's 0.16em
+   would open to a dozen pixels a letter. */
+@utility type-marquee {
+  font-family: var(--font-montreal), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: var(--fs-marquee);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   white-space: nowrap;
 }

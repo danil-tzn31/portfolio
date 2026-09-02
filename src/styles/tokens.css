@@ -14,6 +14,8 @@
   --fs-quote: clamp(1.75rem, 1.2rem + 2.6vw, 3.25rem);
   --fs-title: clamp(2.5rem, 1.4rem + 5.2vw, 6rem);
   --fs-display: clamp(3.5rem, 0.5rem + 13vw, 15rem);
+  /* The marquee. Big enough to be the section rather than a caption strip. */
+  --fs-marquee: clamp(2rem, 4.2vw, 4.25rem);
 
   /* The hero wordmark: all three lines at one size, so the widest of them
      decides how large the block can be. Two limits, whichever is smaller.

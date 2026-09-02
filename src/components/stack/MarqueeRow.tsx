@@ -28,13 +28,13 @@ export function MarqueeRow({
             row.items.map((item) => (
               <span
                 key={`${pass}-${item.label}`}
-                className={`marquee__item flex shrink-0 items-center gap-2.5 pr-7 ${
+                className={`marquee__item type-marquee flex shrink-0 items-center gap-[0.3em] pr-[0.7em] ${
                   pass === 1 ? 'marquee__item--dup' : ''
                 }`}
               >
                 <StackMark item={item} />
-                <span className="type-meta-lg">{item.label}</span>
-                <span className="pl-7 text-[9px] text-ink-soft">&#10033;</span>
+                <span>{item.label}</span>
+                <span className="pl-[0.7em] text-[0.26em] text-ink-soft">&#10033;</span>
               </span>
             )),
           )}
