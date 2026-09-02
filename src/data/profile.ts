@@ -20,11 +20,11 @@ export type Record = {
 export const records: readonly Record[] = [
   {
     n: '01',
-    title: 'IT Service Desk & User Access Management',
+    title: 'IT Service Desk',
     org: 'Cebu Air, Inc. (Cebu Pacific) · OJT',
     dates: 'Feb 2026 – Jun 2026',
     lines: [
-      'Handled tickets and user access requests for staff company-wide.',
+      'Handled service desk tickets for staff company-wide.',
       'Built an offboarding automation in Power Automate and Excel VBA after an audit flagged late notices.',
     ],
   },
