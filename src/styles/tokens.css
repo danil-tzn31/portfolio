@@ -15,6 +15,16 @@
   --fs-title: clamp(2.5rem, 1.4rem + 5.2vw, 6rem);
   --fs-display: clamp(3.5rem, 0.5rem + 13vw, 15rem);
 
+  /* The hero wordmark: all three lines at one size, so the widest of them
+     decides how large the block can be. Two limits, whichever is smaller.
+     Width: MARTIN measures 3.94em at this tracking, and the line has to clear
+     the page margin and the role slip. Height: three lines at --lh-mark have
+     to leave room for the masthead, statement and footer, which come to about
+     18rem. Both limits are viewport-proportional, so the mark fills the sheet
+     at any size without pushing anything below the fold. */
+  --fs-mark: min(23vw, calc((100svh - 20rem) / 2.4));
+  --lh-mark: 0.78;
+
   /* Tracking */
   --tr-meta: 0.16em;
   --tr-title: -0.02em;

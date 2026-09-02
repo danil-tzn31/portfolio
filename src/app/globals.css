@@ -91,6 +91,15 @@
   letter-spacing: var(--tr-display);
 }
 
+/* The hero wordmark. Carries no font-size of its own so the three lines can
+   set theirs in em and stay locked to one ratio. */
+@utility type-mark {
+  font-family: var(--font-montreal), system-ui, sans-serif;
+  font-weight: 800;
+  line-height: var(--lh-display);
+  letter-spacing: var(--tr-display);
+}
+
 @utility type-title {
   font-family: var(--font-montreal), system-ui, sans-serif;
   font-weight: 800;
@@ -114,6 +123,13 @@
   line-height: var(--lh-meta);
   letter-spacing: var(--tr-meta);
   text-transform: uppercase;
+}
+
+@utility type-lead {
+  font-family: var(--font-eiko), Georgia, serif;
+  font-weight: 500;
+  font-size: var(--fs-lead);
+  line-height: 1.25;
 }
 
 @utility type-editorial {
@@ -177,6 +193,34 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
+/* The wordmark: three lines at one size, stacked tight. */
+.wordmark {
+  padding-left: var(--page-margin);
+}
+
+.wordmark__line {
+  display: block;
+  font-size: var(--fs-mark);
+  line-height: var(--lh-mark);
+  white-space: nowrap;
+}
+
+/* The scroll cue: a dashed rule feeding downward, like paper through a
+   machine. Not an arrow. */
+.paper-feed {
+  display: block;
+  width: 1px;
+  height: 44px;
+  background-image: repeating-linear-gradient(to bottom, currentColor 0 4px, transparent 4px 12px);
+  animation: paper-feed 1.4s linear infinite;
+}
+
+@keyframes paper-feed {
+  to {
+    background-position-y: 12px;
+  }
+}
+
 /* Ink bleed is gated on a class the preloader adds when it finishes, so the
    filter can never delay the first paint of the wordmark. */
 .printed .ink-bleed {
@@ -184,7 +228,8 @@ html.lenis body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .grain {
+  .grain,
+  .paper-feed {
     animation: none;
   }
 }
