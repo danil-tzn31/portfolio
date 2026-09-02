@@ -5,6 +5,7 @@ import { Masthead } from './Masthead';
 import { Wordmark } from './Wordmark';
 import { Rule } from '@/components/chrome/marks/Rule';
 import { TornEdge } from '@/components/chrome/marks/TornEdge';
+import { Preloader } from '@/components/preloader/Preloader';
 import { profile } from '@/data/profile';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { E } from '@/lib/motion';
@@ -37,7 +38,7 @@ export function Hero() {
 
   return (
     <section ref={scope} className="relative min-h-[100svh] overflow-x-clip">
-      <div ref={paper}>
+      <div ref={paper} className="relative">
         {/* The sheet and its torn edge are siblings, not parent and child: a
             tear drawn inside a bg-paper box has its notches filled in by that
             box's own background. 1.25rem shorter than the section so the
@@ -74,6 +75,8 @@ export function Hero() {
         </div>
 
         <TornEdge variant={0} className="text-paper" />
+
+        <Preloader wordmark={wordmark} />
       </div>
     </section>
   );

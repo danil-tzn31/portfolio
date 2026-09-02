@@ -193,8 +193,42 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
-/* The wordmark: three lines at one size, stacked tight. */
+/* Scroll lock while the preloader runs. Same mechanism as lenis.stop(), used
+   directly because Lenis has not mounted yet at that point. */
+html.is-loading,
+html.is-loading body {
+  overflow: clip;
+}
+
+.preloader {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: var(--ink);
+}
+
+/* While the curtain rises, the wordmark is painted with a two-stop gradient
+   whose hard edge tracks the curtain's bottom edge: paper above the line,
+   ink below it. One element, no blend mode, and no second copy of the name
+   to keep in registration. --curtain is written per frame by the same tween
+   that moves the curtain, so the two can never drift apart. */
+.wordmark--curtain {
+  color: transparent;
+  background-image: linear-gradient(
+    to bottom,
+    var(--paper) 0 var(--curtain, 100%),
+    var(--ink) var(--curtain, 100%) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* The wordmark: three lines at one size, stacked tight. It sits above the
+   preloader panel so the letters can assemble on black before the sheet is
+   uncovered. */
 .wordmark {
+  position: relative;
+  z-index: 20;
   padding-left: var(--page-margin);
 }
 

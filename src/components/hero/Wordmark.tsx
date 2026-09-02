@@ -13,7 +13,7 @@ type Props = {
 
 export function Wordmark({ className, ref }: Props) {
   return (
-    <h1 ref={ref} className={`wordmark type-mark uppercase ${className ?? ''}`}>
+    <h1 ref={ref} className={`wordmark ink-bleed type-mark uppercase ${className ?? ''}`}>
       {profile.name.map((line) => (
         <span key={line} className="wordmark__line">
           {line}{' '}
