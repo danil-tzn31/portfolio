@@ -9,13 +9,14 @@ import { prefersReducedMotion } from '@/lib/reduced-motion';
 const FONT_TIMEOUT = 900;
 const FAILSAFE = 6;
 
-// Three seconds: the last letter is delayed 1.05 and takes 0.70 to land, then
-// a beat, then the curtain takes most of a second to clear the screen. The
-// curtain is the slowest thing here on purpose — it is the only moment the
-// page is uncovered, and it should read as heavy rather than as a wipe.
-const CHAR_DURATION = 0.7;
-const HOLD = 0.3;
-const CURTAIN = 0.95;
+// Two and a half seconds: the last letter is delayed 0.78 and takes 0.62 to
+// land, then a beat, then the curtain takes most of a second to clear the
+// screen. The curtain keeps its length when the total is trimmed — it is the
+// only moment the page is uncovered, and it should read as heavy rather than
+// as a wipe. Time comes out of the assembly instead.
+const CHAR_DURATION = 0.62;
+const HOLD = 0.2;
+const CURTAIN = 0.9;
 const CURTAIN_AT = Math.max(...CHAR_ENTRY.map((entry) => entry.d)) + CHAR_DURATION + HOLD;
 
 /**
