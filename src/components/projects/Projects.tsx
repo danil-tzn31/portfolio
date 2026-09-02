@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef } from 'react';
-import { ContactGrid } from './ContactGrid';
 import { ContactSheet } from './ContactSheet';
 import { ProjectDetail } from './ProjectDetail';
 import { ScanBand, scanWipe } from './ScanWipe';
@@ -10,7 +9,6 @@ import { TornEdge } from '@/components/chrome/marks/TornEdge';
 import { projects } from '@/data/projects';
 import { gsap, useGSAP, ScrollTrigger } from '@/lib/gsap';
 import { D, E, SCRUB, SNAP } from '@/lib/motion';
-import { prefersReducedMotion } from '@/lib/reduced-motion';
 import { getLenis } from '@/lib/smooth-scroll';
 
 /** Steps between the first frame and the last. */
@@ -205,56 +203,6 @@ export function Projects() {
         };
       });
 
-      // Small screens, and any screen with motion turned down. Four sheets
-      // scrolled past rather than one frame held, so nothing is pinned and
-      // nothing is scrubbed: the page moves at the speed the thumb moves it.
-      mm.add('(max-width: 1023px), (prefers-reduced-motion: reduce)', () => {
-        const q = gsap.utils.selector(root);
-        const counter = q('.projects__counter')[0];
-        const cells = q('.index__cell');
-        const quiet = prefersReducedMotion();
-
-        q('.detail__panel').forEach((panel, i) => {
-          const band = panel.querySelector<HTMLElement>('.scan-band--sheet');
-          const halftone = panel.querySelector('.detail__halftone');
-          const plate = panel.querySelector('.detail__plate');
-
-          // Which sheet the reader is on, for the sticky counter and the
-          // index. Half the viewport, so it changes when the sheet does.
-          ScrollTrigger.create({
-            trigger: panel,
-            start: 'top 50%',
-            end: 'bottom 50%',
-            onToggle: ({ isActive }) => {
-              if (!isActive) return;
-              if (counter) counter.textContent = projects[i].n;
-              cells.forEach((cell, k) => cell.classList.toggle('is-active', k === i));
-            },
-          });
-
-          if (quiet || !band) return;
-
-          // The same scan bar, doing the other half of its job: on desktop it
-          // covers a swap, here it uncovers a sheet as it arrives.
-          const entry = gsap
-            .timeline({
-              scrollTrigger: {
-                trigger: panel,
-                start: 'top 70%',
-                toggleActions: 'play none none reverse',
-              },
-            })
-            .set(band, { transformOrigin: 'right center' })
-            .fromTo(band, { scaleX: 1 }, { scaleX: 0, duration: D.reveal, ease: E.settle });
-
-          if (halftone) {
-            entry.fromTo(halftone, { opacity: 1 }, { opacity: 0, duration: D.base, ease: E.settle }, '<');
-          }
-          if (plate) {
-            entry.fromTo(plate, { scale: 1.03 }, { scale: 1, duration: D.slow, ease: E.settle }, '<');
-          }
-        });
-      });
     },
     { scope },
   );
@@ -268,9 +216,6 @@ export function Projects() {
       <div className="projects__stage flex flex-col">
         <div className="flex min-h-0 flex-1 flex-col bg-paper text-ink">
           <div className="mx-auto flex min-h-0 w-full max-w-[var(--measure)] flex-1 flex-col px-[var(--page-margin)] py-[clamp(1.5rem,5vh,3rem)]">
-            {/* Sticky on a small screen, where the four sheets are a scroll
-                rather than a held frame and there is otherwise nothing to say
-                which one you are on. */}
             <div className="projects__head flex items-baseline gap-[var(--gutter)]">
               <div className="flex-1">
                 <SectionLabel n="04">Projects</SectionLabel>
@@ -278,10 +223,6 @@ export function Projects() {
               <p className="type-meta shrink-0 text-ink-soft">
                 Frame <span className="projects__counter">01</span> / 0{projects.length}
               </p>
-            </div>
-
-            <div className="projects__index">
-              <ContactGrid />
             </div>
 
             <div className="projects__grid mt-[clamp(1.25rem,4vh,2.5rem)] min-h-0 flex-1">
@@ -298,11 +239,6 @@ export function Projects() {
                     className="detail__panel"
                   >
                     <ProjectDetail project={project} />
-                    {/* Each sheet's own entry wipe. The shared band above is a
-                        transition between two projects; this one is a reveal,
-                        and it only exists where the sheets are scrolled past
-                        rather than swapped. */}
-                    <ScanBand className="scan-band--sheet" />
                   </div>
                 ))}
                 <ScanBand ref={band} />
