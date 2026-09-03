@@ -63,7 +63,7 @@ export const projects: readonly Project[] = [
     n: '04',
     slug: 'Watch Price',
     title: 'Luxury Watch Price Prediction',
-    year: '2026',
+    year: '2025',
     plain:
       'Estimates what a luxury watch should cost from its specifications, and checks ten models to see which does it best.',
     does: [
