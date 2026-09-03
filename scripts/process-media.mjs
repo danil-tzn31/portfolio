@@ -1,4 +1,4 @@
-import { mkdir, readdir } from 'node:fs/promises';
+import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
@@ -11,6 +11,25 @@ import sharp from 'sharp';
  */
 const SOURCE = process.argv[2] ?? path.join('..', 'portfolio media resources');
 const OUT = path.join('public', 'media');
+
+/**
+ * Named rather than globbed: the source folder also holds fonts and the other
+ * two plots, which are not site media.
+ *
+ * `crop` is [left, top, width, height] in source pixels. `out` names the files
+ * to write — the portrait never resolves and is never on the contact sheet, so
+ * it only needs the screen. `ink` is the thumbnail's target coverage; `null`
+ * exposes it as line art instead (see THUMB_INK).
+ */
+const ALL = ['plate', 'halftone', 'thumb'];
+
+const SOURCES = [
+  { file: 'artms.png', name: 'artms' },
+  { file: 'moodtune.png', name: 'moodtune' },
+  { file: 'halina.png', name: 'halina' },
+  { file: 'lasso scatterplot.png', name: 'watch', crop: [250, 12, 1670, 1050], ink: null },
+  { file: 'profile.jpg', name: 'portrait', crop: [276, 190, 648, 810], out: ['halftone'] },
+];
 
 /** Greyscale plate: the resolved state, behind the halftone. */
 const PLATE_WIDTH = 2000;
@@ -33,9 +52,16 @@ const SCREEN_LEVELS = [1.25, -22];
  * Each thumbnail is exposed to the same ink coverage rather than sharing one
  * curve. A bright photograph and a near-black interface put wildly different
  * amounts of ink on the page, and the contact sheet shows all four at once.
+ *
+ * A plot is the exception, and it is why `ink` can be null. Line art on white
+ * is already near-binary: forcing it to a photograph's coverage floods the
+ * background and there is nothing left to read.
  */
 const THUMB_INK = 0.44;
 const THUMB_CONTRAST = 0.9;
+
+/** Line art, as [multiply, add]: clips the page back to white before dithering. */
+const LINE_LEVELS = [1.7, -70];
 
 const BAYER = [
   [0, 32, 8, 40, 2, 34, 10, 42],
@@ -54,8 +80,15 @@ const BAYER = [
  * threshold cell: at one pixel the screen aliases into grey mush under the
  * browser's downscale, at two it survives.
  */
-async function grey(source, width, [multiply, add]) {
-  return sharp(source).resize({ width }).greyscale().linear(multiply, add).raw().toBuffer({
+const read = (file, crop) => {
+  const image = sharp(path.join(SOURCE, file));
+  if (!crop) return image;
+  const [left, top, width, height] = crop;
+  return image.extract({ left, top, width, height });
+};
+
+async function grey({ file, crop }, width, [multiply, add]) {
+  return read(file, crop).resize({ width }).greyscale().linear(multiply, add).raw().toBuffer({
     resolveWithObject: true,
   });
 }
@@ -103,33 +136,34 @@ const kb = (bytes) => `${(bytes / 1024).toFixed(0)} kB`;
 
 await mkdir(OUT, { recursive: true });
 
-const sources = (await readdir(SOURCE)).filter((name) => name.endsWith('.png'));
+for (const entry of SOURCES) {
+  const { name, out = ALL, ink = THUMB_INK } = entry;
+  const line = [name.padEnd(10)];
 
-for (const file of sources) {
-  const name = path.basename(file, '.png');
-  const source = path.join(SOURCE, file);
+  if (out.includes('plate')) {
+    const plate = await read(entry.file, entry.crop)
+      .resize({ width: PLATE_WIDTH })
+      .greyscale()
+      .linear(1.06, -6)
+      .avif({ quality: 55 })
+      .toFile(path.join(OUT, `${name}.avif`));
+    line.push(`plate ${kb(plate.size)}`);
+  }
 
-  const plate = await sharp(source)
-    .resize({ width: PLATE_WIDTH })
-    .greyscale()
-    .linear(1.06, -6)
-    .avif({ quality: 55 })
-    .toFile(path.join(OUT, `${name}.avif`));
+  if (out.includes('halftone')) {
+    const halftone = await write1Bit(
+      toSharp(dither(await grey(entry, SCREEN_WIDTH, SCREEN_LEVELS), SCREEN_CELL)),
+      path.join(OUT, `${name}-halftone.png`),
+    );
+    line.push(`halftone ${kb(halftone.size)}`);
+  }
 
-  const halftone = await write1Bit(
-    toSharp(dither(await grey(source, SCREEN_WIDTH, SCREEN_LEVELS), SCREEN_CELL)),
-    path.join(OUT, `${name}-halftone.png`),
-  );
+  if (out.includes('thumb')) {
+    const grid = await grey(entry, THUMB_WIDTH, ink === null ? LINE_LEVELS : [THUMB_CONTRAST, 0]);
+    const exposed = ink === null ? dither(grid, THUMB_CELL) : expose(grid, THUMB_CELL, ink);
+    const thumb = await write1Bit(toSharp(exposed), path.join(OUT, `${name}-thumb.png`));
+    line.push(`thumb ${kb(thumb.size)} at ${(exposed.ink * 100).toFixed(0)}% ink`);
+  }
 
-  const exposed = expose(
-    await grey(source, THUMB_WIDTH, [THUMB_CONTRAST, 0]),
-    THUMB_CELL,
-    THUMB_INK,
-  );
-  const thumb = await write1Bit(toSharp(exposed), path.join(OUT, `${name}-thumb.png`));
-
-  console.log(
-    `${name.padEnd(10)} plate ${kb(plate.size)}   halftone ${kb(halftone.size)}   ` +
-      `thumb ${kb(thumb.size)} at ${(exposed.ink * 100).toFixed(0)}% ink`,
-  );
+  console.log(line.join('   '));
 }

@@ -9,7 +9,14 @@ export type Project = {
   does: readonly [string, string];
   stack: readonly string[];
   links: { live?: string; source: string };
-  media: { kind: 'plate'; base: string } | { kind: 'chart' };
+  /** Basename in public/media of the plate, halftone and thumbnail. */
+  plate: string;
+  /**
+   * A plot rather than a screenshot. It is fitted whole instead of cropped
+   * from the top — a chart with its axis cut off is not a chart — and
+   * multiplied, so the page shows through the figure's white.
+   */
+  figure?: true;
 };
 
 export const projects: readonly Project[] = [
@@ -28,7 +35,7 @@ export const projects: readonly Project[] = [
       live: 'https://artms-website.vercel.app',
       source: 'https://github.com/danil-tzn31/ARTMS-Website',
     },
-    media: { kind: 'plate', base: 'artms' },
+    plate: 'artms',
   },
   {
     n: '02',
@@ -46,7 +53,7 @@ export const projects: readonly Project[] = [
       live: 'https://moodtune-psi-lyart.vercel.app',
       source: 'https://github.com/danil-tzn31/moodtune',
     },
-    media: { kind: 'plate', base: 'moodtune' },
+    plate: 'moodtune',
   },
   {
     n: '03',
@@ -63,7 +70,7 @@ export const projects: readonly Project[] = [
       live: 'https://halina-website-revamped.vercel.app',
       source: 'https://github.com/danil-tzn31/Halina-Website-Revamped',
     },
-    media: { kind: 'plate', base: 'halina' },
+    plate: 'halina',
   },
   {
     n: '04',
@@ -71,13 +78,14 @@ export const projects: readonly Project[] = [
     title: 'Luxury Watch Price Prediction',
     year: '2026',
     plain:
-      'Estimates what a luxury watch should cost from its specifications, and checks ten models to see which does it best.',
+      'Estimates what a luxury watch should cost from its specifications, and checks nine models to see which does it best.',
     does: [
-      'Cleans the data, then trains ten regression models tuned with GridSearchCV.',
-      'Compares them on RMSE and R², with residual and prediction-vs-actual plots.',
+      'Cleans the data, then trains nine regression models tuned with GridSearchCV.',
+      'Lasso came out best at R² 0.87, checked on residual and predicted-vs-actual plots.',
     ],
     stack: ['Python', 'pandas', 'NumPy', 'scikit-learn', 'matplotlib', 'seaborn', 'Jupyter'],
     links: { source: 'https://github.com/danil-tzn31/Luxury-Watch-Price-Prediction' },
-    media: { kind: 'chart' },
+    plate: 'watch',
+    figure: true,
   },
 ];

@@ -90,20 +90,12 @@ export function Projects() {
         const resolve = (panel: HTMLElement) => {
           const halftone = panel.querySelector('.detail__halftone');
           const plate = panel.querySelector('.detail__plate');
-          const bars = panel.querySelectorAll('.chart__bar');
 
           if (halftone) {
             gsap.fromTo(halftone, { opacity: 1 }, { opacity: 0, duration: D.base, ease: E.settle });
           }
           if (plate) {
             gsap.fromTo(plate, { scale: 1.03 }, { scale: 1, duration: D.slow, ease: E.settle });
-          }
-          if (bars.length) {
-            gsap.fromTo(
-              bars,
-              { scaleX: 0 },
-              { scaleX: 1, duration: D.base, stagger: 0.04, ease: E.settle },
-            );
           }
         };
 

@@ -101,7 +101,11 @@ export function About() {
       id="about"
       className="flex min-h-[100svh] flex-col pt-[clamp(3rem,10vh,7rem)]"
     >
-      <div className="flex flex-1 flex-col justify-center bg-paper text-ink">
+      {/* Clipped on one axis: the portrait is pasted at an angle, and a tilted
+          full-width box reaches a few pixels past its column on each side —
+          which on a phone is a page you can pan. `clip`, not `hidden`, so the
+          vertical axis stays visible rather than becoming a scroll container. */}
+      <div className="flex flex-1 flex-col justify-center overflow-x-clip bg-paper text-ink">
         <div className="mx-auto w-full max-w-[var(--measure)] px-[var(--page-margin)] py-[clamp(3rem,9vh,6rem)]">
           <SectionLabel n="02">About</SectionLabel>
 

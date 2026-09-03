@@ -2,26 +2,6 @@ import Image from 'next/image';
 import { Sprockets } from '@/components/chrome/marks/Sprockets';
 import { projects } from '@/data/projects';
 
-/** Project 04 has no screenshot: the detail panel's ranking, without labels. */
-const BARS = [0.86, 0.74, 0.68, 0.61, 0.55, 0.47, 0.38, 0.22];
-
-function ChartTile() {
-  return (
-    <span
-      aria-hidden="true"
-      className="absolute inset-0 flex flex-col justify-center gap-[4px] px-[10%]"
-    >
-      {BARS.map((width, i) => (
-        <span
-          key={width}
-          className={`block h-[4px] border border-ink ${i === 0 ? 'bg-ink' : ''}`}
-          style={{ width: `${width * 100}%` }}
-        />
-      ))}
-    </span>
-  );
-}
-
 /**
  * Rendered twice: once for real, once inside the loupe at magnification. The
  * copy is out of the tab order, so a screen reader hears four, not eight.
@@ -43,20 +23,18 @@ function Strip({ ghost }: { ghost?: boolean }) {
               aria-label, which would then have to repeat the visible text. */}
           {!ghost && <span className="sr-only">{`${project.title}, project ${project.n}`}</span>}
           <span className="sheet__plate">
-            {project.media.kind === 'plate' ? (
-              // Its own screen, coarser than the detail panel's: a 1600px
-              // dither shown at 280px is texture, not dots.
-              <Image
-                src={`/media/${project.media.base}-thumb.png`}
-                alt=""
-                fill
-                unoptimized
-                sizes="320px"
-                className="object-cover object-top"
-              />
-            ) : (
-              <ChartTile />
-            )}
+            {/* Its own screen, coarser than the detail panel's: a 1600px
+                dither shown at 280px is texture, not dots. */}
+            <Image
+              src={`/media/${project.plate}-thumb.png`}
+              alt=""
+              fill
+              unoptimized
+              sizes="320px"
+              className={
+                project.figure ? 'object-contain mix-blend-multiply' : 'object-cover object-top'
+              }
+            />
             <span className="sheet__n type-meta">{project.n}</span>
           </span>
           <span className="sheet__caption type-meta">{project.slug}</span>

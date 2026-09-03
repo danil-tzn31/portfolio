@@ -424,11 +424,6 @@ html.is-loading body {
   background-repeat: no-repeat;
 }
 
-.chart__bar {
-  transform-box: fill-box;
-  transform-origin: left center;
-}
-
 /* Stacked: the image takes a share of the width, not of the panel. */
 /* Stacked. Below the breakpoint the section is CSS and nothing else: no pin,
    no scrub, no entry wipes, no index. */

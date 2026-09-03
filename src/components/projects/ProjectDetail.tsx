@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { ModelChart } from './ModelChart';
 import { CornerTicks } from '@/components/chrome/marks/CornerTicks';
 import type { Project } from '@/data/projects';
 
@@ -12,6 +11,8 @@ import type { Project } from '@/data/projects';
  * are `visibility: hidden`, so only the project on screen is reachable.
  */
 export function ProjectDetail({ project }: { project: Project }) {
+  const fit = project.figure ? 'object-contain mix-blend-multiply' : 'object-cover object-top';
+
   return (
     <article className="flex h-full flex-col gap-[clamp(0.9rem,2.8vh,1.9rem)]">
       <header className="flex shrink-0 items-baseline justify-between gap-4">
@@ -24,32 +25,24 @@ export function ProjectDetail({ project }: { project: Project }) {
           a short one it gives way instead of pushing the links off the sheet,
           which is what a fixed vh height does at 1024×640. */}
       <div className="detail__media relative w-full min-h-[clamp(6rem,16vh,12rem)] flex-1 bg-paper">
-        {project.media.kind === 'plate' ? (
-          <>
-            <Image
-              src={`/media/${project.media.base}.avif`}
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 58vw, 100vw"
-              className="detail__plate object-cover object-top"
-            />
-            {/* Unoptimized on purpose: this is a two-colour PNG, and putting a
-                1-bit dither through a lossy re-encode both blurs the screen
-                and comes out larger than the file already committed. */}
-            <Image
-              src={`/media/${project.media.base}-halftone.png`}
-              alt=""
-              fill
-              unoptimized
-              sizes="(min-width: 1024px) 58vw, 100vw"
-              className="detail__halftone object-cover object-top"
-            />
-          </>
-        ) : (
-          <div className="detail__plate size-full border border-ink p-3 text-ink">
-            <ModelChart />
-          </div>
-        )}
+        <Image
+          src={`/media/${project.plate}.avif`}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 58vw, 100vw"
+          className={`detail__plate ${fit}`}
+        />
+        {/* Unoptimized on purpose: this is a two-colour PNG, and putting a
+            1-bit dither through a lossy re-encode both blurs the screen and
+            comes out larger than the file already committed. */}
+        <Image
+          src={`/media/${project.plate}-halftone.png`}
+          alt=""
+          fill
+          unoptimized
+          sizes="(min-width: 1024px) 58vw, 100vw"
+          className={`detail__halftone ${fit}`}
+        />
         <CornerTicks className="text-ink" />
       </div>
 
