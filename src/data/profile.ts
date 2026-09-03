@@ -68,7 +68,7 @@ export const contact = {
       href: 'https://www.linkedin.com/in/daniel-martin-tizon',
     },
   ] as readonly Channel[],
-  location: 'Dasmariñas, Cavite, Philippines · UTC+8',
+  location: 'Imus, Cavite, Philippines · UTC+8',
   colophon: [
     'Set in PP Neue Montreal & PP Eiko',
     'Built with Next.js and GSAP',
