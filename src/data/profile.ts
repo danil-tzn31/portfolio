@@ -2,7 +2,7 @@ export const about = {
   // Two sentences each, and no more. Nothing on this site asks to be read
   // twice: the projects carry the detail, the copy points at them.
   quote:
-    'I build things to find out how they work. It’s a slow way to learn, and the only one that’s stuck.',
+    'Building things and learning from it is how I do it, no matter the difficulty',
   paragraphs: [
     'I’m Daniel. I build websites and small machine-learning projects end to end — design, front end, back end, deployed.',
     'Computer Engineering at De La Salle University–Dasmariñas, then an internship on an IT service desk, which is a good place to learn what actually breaks.',
