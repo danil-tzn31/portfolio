@@ -140,6 +140,17 @@
   white-space: nowrap;
 }
 
+/* A URL set as type. Semibold from the display family at reading size —
+   the lead size turns a thirty-character link into two broken lines, and a
+   link that wraps mid-word does not read as an address. */
+@utility type-link {
+  font-family: var(--font-montreal), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: var(--fs-body);
+  line-height: 1.25;
+  letter-spacing: var(--tr-title);
+}
+
 @utility type-lead {
   font-family: var(--font-eiko), Georgia, serif;
   font-weight: 500;
@@ -550,6 +561,37 @@ html.is-loading body {
     z-index: 5;
     background: var(--ink);
     transform: scaleX(0);
+  }
+}
+
+/* The label plate that follows the pointer. Fixed, blended, and out of the
+   way of everything: it is decoration over a cursor that is still the real
+   one underneath. */
+.cursor-plate {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 95;
+  display: none;
+  min-width: 44px;
+  padding: 4px 8px;
+  border-radius: 1px;
+  background: var(--paper-hi);
+  color: var(--ink);
+  font-size: 0.625rem;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  mix-blend-mode: difference;
+  /* Offset from the pointer so the plate never sits under the crosshair it
+     is labelling. */
+  translate: 18px 14px;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cursor-plate {
+    display: block;
   }
 }
 

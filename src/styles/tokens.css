@@ -44,6 +44,20 @@
   --gutter: clamp(0.75rem, 1.6vw, 1.5rem);
   --measure: 105rem;
 
+  /* The three contact addresses, all at one size and all on one line.
+     Sized from the width actually available rather than from a viewport
+     fraction: the longest of them is twenty-four characters of Extrabold,
+     which measures about 15em, so the type can be as large as that measure
+     divided by 13.2 and no larger — 24 characters of this face measure about
+     0.48em each, and the tenth of an em of slack is what keeps the tail of
+     .com off the page margin. --arrow-col is the space the trailing marks
+     occupy, and it comes out of the same sum. */
+  --arrow-col: clamp(2rem, 4vw, 4.5rem);
+  --fs-contact: min(
+    6rem,
+    calc((min(100vw, var(--measure)) - 2 * var(--page-margin) - var(--arrow-col) - var(--gutter)) / 13.2)
+  );
+
   /* The contact sheet. Frame height is the only free value — the width
      follows at 16:10, the pitch is height plus caption plus gap, and the
      loupe is one whole frame plus a bleed on every side. Sized so three

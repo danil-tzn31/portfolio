@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { Cursor } from '@/components/chrome/Cursor';
 import { Grain } from '@/components/chrome/Grain';
+import { PageCounter } from '@/components/chrome/PageCounter';
 import { GridOverlay } from '@/components/chrome/GridOverlay';
 import { PrintDefs } from '@/components/chrome/marks/PrintDefs';
 import { SmoothScroll } from '@/lib/smooth-scroll';
@@ -43,6 +45,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body>
         {children}
         <SmoothScroll />
+        <PageCounter />
+        <Cursor />
         <Grain />
         <PrintDefs />
         {process.env.NODE_ENV === 'development' && <GridOverlay />}

@@ -43,3 +43,35 @@ export const profile = {
   availability: 'Open to entry-level & junior roles',
   scrollCue: 'Turn the page',
 } as const;
+
+export type Channel = {
+  label: string;
+  /** One line. The label says which platform, so the value is the address on it. */
+  value: string;
+  href?: string;
+};
+
+export const contact = {
+  email: 'daniel.tizon31@gmail.com',
+  /**
+   * All three at one size, on one line each. That is only possible if they
+   * are a similar length, so the two links show the handle rather than the
+   * whole URL — the label above already names the platform, and carrying
+   * "linkedin.com/in/" into the value would cap all three at half the size.
+   */
+  channels: [
+    { label: 'Email', value: 'daniel.tizon31@gmail.com' },
+    { label: 'GitHub', value: 'danil-tzn31', href: 'https://github.com/danil-tzn31' },
+    {
+      label: 'LinkedIn',
+      value: 'daniel-martin-tizon',
+      href: 'https://www.linkedin.com/in/daniel-martin-tizon',
+    },
+  ] as readonly Channel[],
+  location: 'Dasmariñas, Cavite, Philippines · UTC+8',
+  colophon: [
+    'Set in PP Neue Montreal & PP Eiko',
+    'Built with Next.js and GSAP',
+    'Issue 01 · 2026',
+  ],
+} as const;

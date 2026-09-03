@@ -37,7 +37,7 @@ export function Hero() {
   );
 
   return (
-    <section ref={scope} className="relative min-h-[100svh] overflow-x-clip">
+    <section ref={scope} id="hero" className="relative min-h-[100svh] overflow-x-clip">
       <div ref={paper} className="relative">
         {/* The sheet and its torn edge are siblings, not parent and child: a
             tear drawn inside a bg-paper box has its notches filled in by that
