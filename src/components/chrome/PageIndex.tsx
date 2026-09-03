@@ -4,30 +4,27 @@ import { useRef } from 'react';
 import { gsap, useGSAP, ScrollTrigger } from '@/lib/gsap';
 import { getLenis } from '@/lib/smooth-scroll';
 
-/** The five pages, in the order they are read. */
+/**
+ * The five pages, each with the ground it is printed on. The ground is named
+ * rather than blended: mix-blend-mode: difference reads to a contrast checker
+ * as white-on-paper, and it is where Safari diverges on fixed elements.
+ */
 const PAGES = [
-  { id: 'hero', name: 'Cover' },
-  { id: 'about', name: 'About' },
-  { id: 'stack', name: 'Tech Stack' },
-  { id: 'projects', name: 'Projects' },
-  { id: 'contact', name: 'Contact' },
+  { id: 'hero', name: 'Cover', ground: 'ink' },
+  { id: 'about', name: 'About', ground: 'paper' },
+  { id: 'stack', name: 'Tech Stack', ground: 'paper' },
+  { id: 'projects', name: 'Projects', ground: 'paper' },
+  { id: 'contact', name: 'Contact', ground: 'ink' },
 ] as const;
 
 const label = (i: number) => String(i + 1).padStart(2, '0');
 
 /**
- * A contents list, turned on its side and set in the right margin.
+ * A table of contents set in the right margin: title, leader rule, page
+ * number. The current page has the long leader, the rest are ticks.
  *
- * Each page is a title, a leader rule and a page number — the arrangement a
- * printed table of contents has used for four hundred years, which is the
- * reason it does not read as a navigation bar. The page you are on has the
- * long leader; the rest are ticks. It replaces the separate page counter
- * rather than sitting beside it: both were answering "where am I", and one
- * fixed mark on the screen is the budget.
- *
- * Nothing here tweens. The leader changes length and the title appears, both
- * as cuts, which is what the rest of the site does and what makes the
- * reduced-motion case need no special handling at all.
+ * Nothing tweens — the leader and title change as cuts, which is why the
+ * reduced-motion case needs no handling.
  */
 export function PageIndex() {
   const scope = useRef<HTMLElement>(null);
@@ -36,11 +33,16 @@ export function PageIndex() {
     () => {
       const rows = gsap.utils.selector(scope)('.page-index__page');
 
-      PAGES.forEach(({ id }, i) => {
-        const section = document.getElementById(id);
-        if (!section) return;
+      const nav = scope.current;
 
-        const mark = () => rows.forEach((row, k) => row.classList.toggle('is-active', k === i));
+      PAGES.forEach(({ id, ground }, i) => {
+        const section = document.getElementById(id);
+        if (!section || !nav) return;
+
+        const mark = () => {
+          rows.forEach((row, k) => row.classList.toggle('is-active', k === i));
+          nav.classList.toggle('on-ink', ground === 'ink');
+        };
 
         ScrollTrigger.create({
           trigger: section,
@@ -73,7 +75,7 @@ export function PageIndex() {
   );
 
   return (
-    <nav ref={scope} aria-label="Pages" className="page-index type-meta">
+    <nav ref={scope} aria-label="Pages" className="page-index type-meta on-ink">
       {PAGES.map(({ id, name }, i) => (
         <a
           key={id}

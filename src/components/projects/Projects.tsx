@@ -34,9 +34,8 @@ export function Projects() {
 
       const mm = gsap.matchMedia();
 
-      // The loupe is a desktop idea: it needs two columns and a pointer's
-      // worth of screen. Below that, and under reduced motion, the panels
-      // stack and the CSS in globals.css is the whole layout.
+      // Below this, and under reduced motion, the panels stack and the CSS in
+      // globals.css is the whole layout.
       mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
         const q = gsap.utils.selector(root);
 
@@ -51,20 +50,14 @@ export function Projects() {
         const bar = band.current;
         if (!stage || !sheet || !strip || !ghost || !bar) return;
 
-        /**
-         * Everything the strip needs is read from the DOM, never assumed: the
-         * frame is sized in vh and the caption wraps differently at different
-         * widths, so a hardcoded pitch is wrong at the second viewport size
-         * anyone tries.
-         */
+        // Measured, not hardcoded: the frame is sized in vh and the caption
+        // wraps differently at different widths.
         let pitch = 0;
 
         const measure = () => {
           const frame = frames[0];
-          // The glass goes over the picture, not over the picture and its
-          // caption. Measuring the whole frame makes the bleed below the image
-          // as deep as the caption is tall, and the loupe stops being square
-          // about what it is magnifying.
+          // The plate, not the whole frame: the glass goes over the picture,
+          // not over the picture and its caption.
           const plate = frame?.querySelector<HTMLElement>('.sheet__plate');
           if (!frame || !plate) return;
 
@@ -81,14 +74,11 @@ export function Projects() {
           sheet.style.setProperty('--lens-h', `${lensH}px`);
           sheet.style.setProperty('--lens-left', `${lensLeft}px`);
           sheet.style.setProperty('--lens-w', `${lensW}px`);
-          // Picture 01 starts centred under the glass. The plate sits at the
-          // top of its frame, so padding the strip by half a plate puts it
-          // there.
+          // Centres picture 01 under the glass.
           sheet.style.setProperty('--strip-pad', `${centre - plateH / 2}px`);
 
-          // Scaling about the centre of the lens is what keeps the copy in
-          // register with the original: every other origin makes the two
-          // strips agree at one scroll position and nowhere else.
+          // The lens centre, and no other origin: anything else puts the copy
+          // in register at one scroll position and nowhere else.
           gsap.set(ghost, {
             scale: MAG,
             transformOrigin: `${lensLeft + lensW / 2}px ${centre}px`,
@@ -133,10 +123,9 @@ export function Projects() {
         let scan: gsap.core.Timeline | undefined;
         show(active);
 
-        // One tween moves both strips. The copy travels the same distance
-        // times the magnification, because a transform's translation is not
-        // scaled by the scale beside it — so writing the same y to both would
-        // leave the glass showing the wrong frame everywhere but the origin.
+        // One tween moves both strips. The copy travels y × MAG: a transform's
+        // translation is not scaled by the scale beside it, so writing the
+        // same y to both shows the wrong frame everywhere but the origin.
         const travel = { y: 0 };
 
         const tl = gsap.timeline({
@@ -179,8 +168,7 @@ export function Projects() {
         );
 
         // Tabbing through the strip walks the loupe down the sheet, so the
-        // keyboard sees the same thing the mouse does rather than a static
-        // frame with four invisible links on it.
+        // keyboard sees what the mouse does.
         const jump = frames.map((frame, i) => {
           const handler = () => {
             const st = tl.scrollTrigger;
@@ -202,15 +190,13 @@ export function Projects() {
           scan?.kill();
         };
       });
-
     },
     { scope },
   );
 
   return (
     <section ref={scope} id="projects" aria-label="Projects">
-      {/* The black band between sheets is outside the pin, so the paper fills
-          the screen for the whole time the section is held. */}
+      {/* Outside the pin, so the paper fills the screen for the whole hold. */}
       <div className="h-[clamp(3rem,10vh,7rem)]" />
 
       <div className="projects__stage flex flex-col">

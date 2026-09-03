@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The site's own mark at 32px: a sheet of ink with a torn bottom edge.
+       Drawn with the same kind of hand path the panels use, scaled to fit,
+       because at this size a monogram is a smudge and a tear still reads. -->
+  <rect width="32" height="32" fill="#0b0b0b"/>
+  <path d="M0 32V24.5L3.4 25.8L6.6 24.2L9.2 25.4L11.4 23.9L13.8 25.6L16.2 24.1L18.4 26L20.8 24.4L23.6 25.9L26.2 24L28.8 25.5L32 24.2V32Z" fill="#edeae3"/>
+</svg>

@@ -24,7 +24,10 @@ export const projects: readonly Project[] = [
       'Images, video and fonts processed at build time so it loads fast on a phone.',
     ],
     stack: ['Vite', 'React 19', 'TypeScript', 'Tailwind v4', 'GSAP', 'Lenis', 'sharp', 'ffmpeg'],
-    links: { live: 'https://artms-website.vercel.app', source: 'https://github.com/danil-tzn31/ARTMS-Website' },
+    links: {
+      live: 'https://artms-website.vercel.app',
+      source: 'https://github.com/danil-tzn31/ARTMS-Website',
+    },
     media: { kind: 'plate', base: 'artms' },
   },
   {
@@ -39,7 +42,10 @@ export const projects: readonly Project[] = [
       'Suggests similar artists, plays a preview, and copies any swatch on click.',
     ],
     stack: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'Express', 'iTunes API', 'Last.fm API'],
-    links: { live: 'https://moodtune-psi-lyart.vercel.app', source: 'https://github.com/danil-tzn31/moodtune' },
+    links: {
+      live: 'https://moodtune-psi-lyart.vercel.app',
+      source: 'https://github.com/danil-tzn31/moodtune',
+    },
     media: { kind: 'plate', base: 'moodtune' },
   },
   {
@@ -63,7 +69,7 @@ export const projects: readonly Project[] = [
     n: '04',
     slug: 'Watch Price',
     title: 'Luxury Watch Price Prediction',
-    year: '2025',
+    year: '2026',
     plain:
       'Estimates what a luxury watch should cost from its specifications, and checks ten models to see which does it best.',
     does: [

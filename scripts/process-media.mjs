@@ -4,10 +4,8 @@ import sharp from 'sharp';
 
 /**
  * Turns the raw project screenshots into the two states the projects section
- * uses: a greyscale plate, and a 1-bit halftone that resolves into it.
- *
- * Run once and commit the output. The script stays in the repo because it
- * documents how the images were made, not because it runs on every build.
+ * uses: a greyscale plate, and a 1-bit halftone that resolves into it. Run by
+ * hand; the output is committed.
  *
  *   node scripts/process-media.mjs ["../portfolio media resources"]
  */
@@ -17,19 +15,13 @@ const OUT = path.join('public', 'media');
 /** Greyscale plate: the resolved state, behind the halftone. */
 const PLATE_WIDTH = 2000;
 
-/**
- * Halftone. Two numbers decide whether this reads as print or as mud, and
- * they are related — see the note below.
- */
 const SCREEN_WIDTH = 1600;
 const SCREEN_CELL = 2;
 
 /**
- * The contact-sheet thumbnail. Screened separately rather than scaled down
- * from the big one: the 1600px screen shown in a 280px frame is texture, and
- * the loupe needs dots it can visibly enlarge. Authored at twice the frame's
- * width with a coarse cell, so the dots survive a magnification of 1.35 and
- * still land near one CSS pixel outside the glass.
+ * The contact-sheet thumbnail, screened separately rather than scaled down
+ * from the big one: a 1600px screen shown in a 280px frame is texture, and
+ * the loupe needs dots it can visibly enlarge.
  */
 const THUMB_WIDTH = 560;
 const THUMB_CELL = 2;
@@ -38,18 +30,9 @@ const THUMB_CELL = 2;
 const SCREEN_LEVELS = [1.25, -22];
 
 /**
- * The thumbnails are exposed rather than filtered.
- *
- * One fixed curve cannot serve four sources: a bright photograph and a
- * near-black interface put wildly different amounts of ink on the page, and
- * the contact sheet shows all four at once, so the difference reads as three
- * of them being wrong. Worse, a dark source under a hard curve crosses almost
- * every threshold and the dither stops describing anything — it becomes
- * static.
- *
- * So each thumbnail gets its own exposure, chosen to land the same proportion
- * of the frame in ink. That is what you would do printing a contact sheet, and
- * it is the only way four unrelated screenshots sit together as a set.
+ * Each thumbnail is exposed to the same ink coverage rather than sharing one
+ * curve. A bright photograph and a near-black interface put wildly different
+ * amounts of ink on the page, and the contact sheet shows all four at once.
  */
 const THUMB_INK = 0.44;
 const THUMB_CONTRAST = 0.9;
@@ -67,12 +50,9 @@ const BAYER = [
 
 /**
  * Ordered dither against a Bayer matrix — the crosshatch a photocopier makes,
- * rather than the softer scatter of error diffusion.
- *
- * SCREEN_CELL widens each threshold cell to that many pixels. It is not a
- * style knob: the image is authored at 1600px and displayed at roughly half
- * that, and a one-pixel cell aliases straight into grey mush with moiré
- * banding under the browser's downscale. Two pixels survives it.
+ * rather than the softer scatter of error diffusion. `cell` widens each
+ * threshold cell: at one pixel the screen aliases into grey mush under the
+ * browser's downscale, at two it survives.
  */
 async function grey(source, width, [multiply, add]) {
   return sharp(source).resize({ width }).greyscale().linear(multiply, add).raw().toBuffer({
@@ -115,9 +95,8 @@ const toSharp = ({ pixels, info }) =>
   sharp(pixels, { raw: { width: info.width, height: info.height, channels: 1 } });
 
 const write1Bit = (image, file) =>
-  // Lossless, and PNG rather than AVIF: a 1-bit image is nothing but hard
-  // edges, so a lossy codec both blurs the screen and encodes larger. A
-  // two-colour palette is half the size of the AVIF here.
+  // PNG, not AVIF: a 1-bit image is nothing but hard edges, so a lossy codec
+  // blurs the screen and encodes larger.
   image.png({ palette: true, colours: 2, compressionLevel: 9 }).toFile(file);
 
 const kb = (bytes) => `${(bytes / 1024).toFixed(0)} kB`;
@@ -130,8 +109,6 @@ for (const file of sources) {
   const name = path.basename(file, '.png');
   const source = path.join(SOURCE, file);
 
-  // AVIF only. Every browser that can run this site has supported it for
-  // years, and a WebP fallback would double the committed bytes for nobody.
   const plate = await sharp(source)
     .resize({ width: PLATE_WIDTH })
     .greyscale()
@@ -144,7 +121,11 @@ for (const file of sources) {
     path.join(OUT, `${name}-halftone.png`),
   );
 
-  const exposed = expose(await grey(source, THUMB_WIDTH, [THUMB_CONTRAST, 0]), THUMB_CELL, THUMB_INK);
+  const exposed = expose(
+    await grey(source, THUMB_WIDTH, [THUMB_CONTRAST, 0]),
+    THUMB_CELL,
+    THUMB_INK,
+  );
   const thumb = await write1Bit(toSharp(exposed), path.join(OUT, `${name}-thumb.png`));
 
   console.log(

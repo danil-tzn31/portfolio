@@ -8,6 +8,7 @@ import { TornEdge } from '@/components/chrome/marks/TornEdge';
 import { about, records } from '@/data/profile';
 import { gsap, useGSAP, SplitText } from '@/lib/gsap';
 import { D, E, SCRUB } from '@/lib/motion';
+import { prefersReducedMotion } from '@/lib/reduced-motion';
 
 export function About() {
   const scope = useRef<HTMLElement>(null);
@@ -16,14 +17,18 @@ export function About() {
 
   useGSAP(
     () => {
-      // autoSplit re-splits on resize and on late font loads, and onSplit
-      // rebuilds the animation against the new lines. Returning the tween
-      // hands it back for cleanup, which is what stops a resize leaving
-      // doubled text behind.
+      // Every animation below hides its target until a trigger fires.
+      if (prefersReducedMotion()) return;
+
+      // autoSplit re-splits on resize and on late font loads; returning the
+      // tween from onSplit is what stops a resize leaving doubled text.
       SplitText.create(quote.current, {
         type: 'lines',
         mask: 'lines',
         autoSplit: true,
+        // SplitText's default writes an aria-label onto the target, and
+        // aria-label is prohibited on a <p>.
+        aria: 'none',
         onSplit: (self) =>
           gsap.from(self.lines, {
             yPercent: 100,
@@ -38,13 +43,14 @@ export function About() {
           }),
       });
 
-      // Body copy is revealed once and never scrubbed. Type that advances and
-      // retreats with the scrollbar cannot be read.
+      // Revealed once, never scrubbed: body copy that advances and retreats
+      // with the scrollbar cannot be read.
       gsap.utils.toArray<HTMLElement>('.about__paragraph', scope.current).forEach((paragraph) => {
         SplitText.create(paragraph, {
           type: 'lines',
           mask: 'lines',
           autoSplit: true,
+          aria: 'none',
           onSplit: (self) =>
             gsap.from(self.lines, {
               yPercent: 100,

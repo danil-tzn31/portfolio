@@ -2,10 +2,8 @@ import type { Channel as ChannelData } from '@/data/profile';
 import { contact } from '@/data/profile';
 
 /**
- * One way to reach him, set at the same size as the other two. The email is a
- * button that copies; the rest are links that open. Everything else about the
- * three is identical, which is the point — this section is three addresses,
- * not one address and two footnotes.
+ * One address, set at the same size as the other two. The email is a button
+ * that copies; the rest are links that open. Nothing else differs.
  */
 export function Channel({ channel, onCopy }: { channel: ChannelData; onCopy?: () => void }) {
   const isEmail = !channel.href;

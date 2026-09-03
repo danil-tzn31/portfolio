@@ -1,13 +1,8 @@
 /**
- * Where each letter of the name flies in from.
- *
- * Seventeen entries, in document order: DANIEL, MARTIN, TIZON. Written by
- * hand and not generated — not superstition, craft. A table lets the letters
- * enter from directions that compose (the given names drop in from above, the
- * surname swings in from off the right edge) and it makes the sequence
- * identical on every load, which is the only way to actually tune it. The
- * final N of TIZON carries the longest delay so the name finishes on its last
- * letter.
+ * Where each letter flies in from. Seventeen entries in document order:
+ * DANIEL, MARTIN, TIZON. Written out rather than generated, so the sequence
+ * is the same on every load and can be tuned by hand. The final N carries the
+ * longest delay, so the name finishes on its last letter.
  *
  * x is vw, y is vh, r is degrees, s is scale, d is the delay in seconds.
  */

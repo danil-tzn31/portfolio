@@ -4,15 +4,12 @@ import { CornerTicks } from '@/components/chrome/marks/CornerTicks';
 import type { Project } from '@/data/projects';
 
 /**
- * One project, at reading size. On desktop this panel is a visual enlargement
- * of whatever the loupe is over.
+ * One project, at reading size. On desktop this panel is an enlargement of
+ * whatever the loupe is over.
  *
- * Its links stay real links. Hiding them from the keyboard on the grounds
- * that the contact strip already carries the project would take the live demo
- * with them — the strip only links to source — and on a screen too small for
- * the strip it would leave the section with no reachable links at all. The
- * three inactive panels are `visibility: hidden`, so only the project on
- * screen is ever in the tab order.
+ * The links stay in the tab order — the strip above only links to source, so
+ * hiding these would take the live demo with them. The three inactive panels
+ * are `visibility: hidden`, so only the project on screen is reachable.
  */
 export function ProjectDetail({ project }: { project: Project }) {
   return (

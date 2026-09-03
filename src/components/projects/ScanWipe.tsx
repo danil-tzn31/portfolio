@@ -5,12 +5,9 @@ import { gsap } from '@/lib/gsap';
 import { D, E } from '@/lib/motion';
 
 /**
- * The photocopier scan bar. A solid band crosses the panel, the content
- * changes underneath it, and the band leaves the other side.
- *
- * The reason it is a band and not a crossfade: a crossfade shows two
- * projects at once, which is the one thing a contact sheet never does. This
- * covers, cuts, and uncovers — the same edit the rest of the site makes.
+ * The photocopier scan bar: a solid band crosses the panel, the content
+ * changes underneath it, and the band leaves the other side. A band rather
+ * than a crossfade, which would show two projects at once.
  */
 export function ScanBand({ ref }: { ref?: Ref<HTMLSpanElement> }) {
   return <span ref={ref} aria-hidden="true" className="scan-band" />;

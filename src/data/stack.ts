@@ -11,10 +11,8 @@ export type StackRow = {
   /** Multiplier on 100px per second. */
   speed: number;
   /**
-   * Which way the items travel. Named rather than signed: the loop's forward
-   * playback moves items left, so the timeScale that produces "right" is the
-   * negative one, and a bare -1 in the data reads as the opposite of what it
-   * does.
+   * Which way the items travel. Named rather than signed: forward playback
+   * moves items left, so a bare -1 here would read as its own opposite.
    */
   direction: 'left' | 'right';
   items: readonly StackItem[];

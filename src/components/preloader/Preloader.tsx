@@ -9,29 +9,15 @@ import { prefersReducedMotion } from '@/lib/reduced-motion';
 const FONT_TIMEOUT = 900;
 const FAILSAFE = 6;
 
-// Two and a half seconds: the last letter is delayed 0.78 and takes 0.62 to
-// land, then a beat, then the curtain takes most of a second to clear the
-// screen. The curtain keeps its length when the total is trimmed — it is the
-// only moment the page is uncovered, and it should read as heavy rather than
-// as a wipe. Time comes out of the assembly instead.
+// Total runtime is roughly 2.5s. Trim it from the assembly, not from CURTAIN.
 const CHAR_DURATION = 0.62;
 const HOLD = 0.2;
 const CURTAIN = 0.9;
 const CURTAIN_AT = Math.max(...CHAR_ENTRY.map((entry) => entry.d)) + CHAR_DURATION + HOLD;
 
 /**
- * There is no separate loading screen. The hero's own <h1> is what assembles:
- * a black curtain covers the sheet, the wordmark sits above it in paper, and
- * its letters fly in from a hand-authored table. The curtain then rises and
- * the page is behind it.
- *
- * The wordmark has to be paper where the curtain still covers and ink where
- * the sheet is already showing, and during the rise it is both at once. That
- * is done with a gradient clipped to the text rather than with
- * mix-blend-mode: difference, which was tried and looked like a rendering
- * fault — a letter inverting across a moving edge reads as a glitch, not a
- * reveal. A hard-stop gradient gives the same per-pixel handoff and stays a
- * single flat colour on each side of the line.
+ * There is no separate loading screen. The hero's own <h1> assembles behind a
+ * black curtain, then the curtain rises and the page is behind it.
  */
 export function Preloader({ wordmark }: { wordmark: RefObject<HTMLHeadingElement | null> }) {
   const panel = useRef<HTMLDivElement>(null);
@@ -44,17 +30,14 @@ export function Preloader({ wordmark }: { wordmark: RefObject<HTMLHeadingElement
 
       const root = document.documentElement;
 
-      // Browsers restore the scroll position on reload. The curtain is
-      // absolute inside the hero, so a restored mid-page position leaves the
-      // visitor looking at the middle of the site, frozen by the scroll lock,
-      // while the entry plays off-screen above them. Go to the top first —
-      // and before the lock, which would otherwise stop the scroll landing.
+      // The curtain is absolute inside the hero, so a restored scroll position
+      // would leave the visitor mid-page while the entry plays above them.
+      // Must run before the lock below, or the scroll never lands.
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
       window.scrollTo(0, 0);
 
-      // The Lenis instance does not exist yet — SmoothScroll sits after
-      // {children} in the layout, so its effect runs after this one. A class
-      // on <html> is the lock, and it is the same mechanism lenis.stop() uses.
+      // Lenis does not exist yet: SmoothScroll sits after {children} in the
+      // layout, so its effect runs after this one. The class is the lock.
       root.classList.add('is-loading');
 
       let split: SplitText | null = null;
@@ -69,37 +52,32 @@ export function Preloader({ wordmark }: { wordmark: RefObject<HTMLHeadingElement
         heading.style.removeProperty('--curtain');
         gsap.set(heading, { clearProps: 'opacity,visibility,color' });
         root.classList.remove('is-loading');
-        // Releases the ink-bleed filter onto display type. Deliberately last,
-        // and on every path, so the filter can never delay the first paint.
+        // Releases the ink-bleed filter onto display type. Last, and on every
+        // path, so the filter can never delay the first paint.
         root.classList.add('printed');
         setDone(true);
       };
 
-      // The full entry plays on every load. The only shortcut is reduced
-      // motion, where the page is simply there.
       if (prefersReducedMotion()) {
         gsap.delayedCall(0.25, finish);
         return;
       }
 
-      // Hidden, not held mid-flight: splitting before the webfont resolves
-      // measures the fallback, and the letters would reflow under the
-      // animation when the real face swaps in.
+      // Splitting before the webfont resolves measures the fallback, and the
+      // letters reflow under the animation when the real face swaps in.
       gsap.set(heading, { autoAlpha: 0 });
 
-      // Only the face the wordmark is set in, not document.fonts.ready — that
-      // waits on every face on the page, including body copy nobody can see
-      // yet, and it costs a few hundred milliseconds of black screen.
+      // Only the wordmark's own face — document.fonts.ready waits on every
+      // face on the page, which is a few hundred ms of black screen.
       const family = getComputedStyle(heading).fontFamily.split(',')[0].replace(/["']/g, '');
       const fontsReady = Promise.race([
-        // A rejected load (404, blocked request) must not take the chain with
-        // it, or the page stays black for good.
+        // A rejected load must not take the chain with it, or the page stays
+        // black for good.
         document.fonts.load(`800 1em "${family}"`).catch(() => undefined),
         new Promise((resolve) => setTimeout(resolve, FONT_TIMEOUT)),
       ]);
 
-      // Nothing on this page is worth a permanently black screen. If anything
-      // above goes wrong, the sheet still gets uncovered.
+      // If anything above goes wrong, the sheet still gets uncovered.
       const failsafe = gsap.delayedCall(FAILSAFE, finish);
 
       let cancelled = false;
@@ -141,8 +119,6 @@ export function Preloader({ wordmark }: { wordmark: RefObject<HTMLHeadingElement
           );
         });
 
-        // The letters land, the page holds still for a beat, then the curtain
-        // goes up.
         let headingTop = 0;
 
         tl.call(
@@ -153,7 +129,7 @@ export function Preloader({ wordmark }: { wordmark: RefObject<HTMLHeadingElement
             split?.revert();
             split = null;
             headingTop = heading.getBoundingClientRect().top;
-            // The entry set colour inline, which would outrank the class and
+            // The entry set colour inline, which outranks the class and would
             // paint the glyphs opaquely over the gradient.
             gsap.set(heading, { clearProps: 'color' });
             heading.classList.add('wordmark--curtain');
@@ -191,9 +167,9 @@ export function Preloader({ wordmark }: { wordmark: RefObject<HTMLHeadingElement
   return (
     <>
       {/* Unmounted rather than [hidden]: utilities here set display, which
-          outranks the preflight rule that hidden relies on. */}
+          outranks the preflight rule hidden relies on. */}
       {!done && <div ref={panel} aria-hidden="true" className="preloader" />}
-      {/* Without scripting the curtain would never rise, so take it out. */}
+      {/* Without scripting the curtain would never rise. */}
       <noscript>
         <style>{`.preloader { display: none }`}</style>
       </noscript>

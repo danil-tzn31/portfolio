@@ -67,16 +67,14 @@
     color: var(--ink);
   }
 
-  /* currentColor rather than a fixed value: the page alternates ink and paper
-     grounds, and a white ring is invisible on half of them. */
+  /* currentColor: the page alternates ink and paper grounds. */
   :focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 3px;
   }
 }
 
-/* Type roles. Named rather than composed from utilities at every call site,
-   because the same five roles repeat on every section. */
+/* Type roles. The same handful repeat on every section. */
 @utility type-display {
   font-family: var(--font-montreal), system-ui, sans-serif;
   font-weight: 800;
@@ -93,8 +91,7 @@
   letter-spacing: var(--tr-display);
 }
 
-/* The hero wordmark. Carries no font-size of its own so the three lines can
-   set theirs in em and stay locked to one ratio. */
+/* No font-size of its own: the three lines set theirs in em. */
 @utility type-mark {
   font-family: var(--font-montreal), system-ui, sans-serif;
   font-weight: 800;
@@ -127,9 +124,7 @@
   text-transform: uppercase;
 }
 
-/* Marquee items. Semibold from the display family rather than the text cut:
-   at this size Montreal Text is no longer a label, and --tr-meta's 0.16em
-   would open to a dozen pixels a letter. */
+/* Display family, not the text cut — at this size it is not a label. */
 @utility type-marquee {
   font-family: var(--font-montreal), system-ui, sans-serif;
   font-weight: 600;
@@ -140,9 +135,7 @@
   white-space: nowrap;
 }
 
-/* A URL set as type. Semibold from the display family at reading size —
-   the lead size turns a thirty-character link into two broken lines, and a
-   link that wraps mid-word does not read as an address. */
+/* A URL set as type. At --fs-lead a long link wraps mid-word. */
 @utility type-link {
   font-family: var(--font-montreal), system-ui, sans-serif;
   font-weight: 600;
@@ -174,9 +167,7 @@
   text-wrap: pretty;
 }
 
-/* Grain. Four fixed offsets at 8fps: enough to read as film, cheap enough
-   to composite. The tile itself stays under reduced motion; only the
-   flicker goes. */
+/* Four offsets at 8fps. The tile stays under reduced motion; the flicker goes. */
 .grain {
   position: fixed;
   inset: 0;
@@ -204,10 +195,8 @@
   }
 }
 
-/* Lenis adds these classes to <html> itself. Taken from lenis/dist/lenis.css,
-   trimmed to the three rules this site actually uses — the last one is what
-   makes lenis.stop() a real scroll lock, so the preloader does not need to
-   touch overflow directly. */
+/* From lenis/dist/lenis.css, trimmed. The last rule is what makes
+   lenis.stop() a real scroll lock. */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -221,8 +210,7 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
-/* Scroll lock while the preloader runs. Same mechanism as lenis.stop(), used
-   directly because Lenis has not mounted yet at that point. */
+/* Scroll lock while the preloader runs; Lenis has not mounted yet. */
 html.is-loading,
 html.is-loading body {
   overflow: clip;
@@ -235,11 +223,9 @@ html.is-loading body {
   background: var(--ink);
 }
 
-/* While the curtain rises, the wordmark is painted with a two-stop gradient
-   whose hard edge tracks the curtain's bottom edge: paper above the line,
-   ink below it. One element, no blend mode, and no second copy of the name
-   to keep in registration. --curtain is written per frame by the same tween
-   that moves the curtain, so the two can never drift apart. */
+/* A two-stop gradient clipped to the text: paper above the line, ink below.
+   --curtain is written per frame by the same tween that moves the curtain,
+   so the two cannot drift apart. */
 .wordmark--curtain {
   color: transparent;
   background-image: linear-gradient(
@@ -251,9 +237,7 @@ html.is-loading body {
   background-clip: text;
 }
 
-/* The wordmark: three lines at one size, stacked tight. It sits above the
-   preloader panel so the letters can assemble on black before the sheet is
-   uncovered. */
+/* Above the preloader panel, so the letters assemble on black. */
 .wordmark {
   position: relative;
   z-index: 20;
@@ -267,8 +251,7 @@ html.is-loading body {
   white-space: nowrap;
 }
 
-/* The scroll cue: a dashed rule feeding downward, like paper through a
-   machine. Not an arrow. */
+/* The scroll cue. Not an arrow. */
 .paper-feed {
   display: block;
   width: 1px;
@@ -283,12 +266,8 @@ html.is-loading body {
   }
 }
 
-/* Projects.
-   Written as CSS rather than utilities because the pinned two-column layout
-   and the stacked one are two different structures, not one structure with
-   different numbers. The stacked version is the default and needs no
-   JavaScript; the sheet, the loupe and the scan bar only exist where they can
-   work — a wide screen, and motion allowed. */
+/* Projects. CSS rather than utilities: the pinned two-column layout and the
+   stacked one are different structures, not one with different numbers. */
 
 .projects__grid {
   display: grid;
@@ -309,8 +288,7 @@ html.is-loading body {
   display: none;
 }
 
-/* The strip. Its width is set by the frame height — the plate is 16:10, so
-   fixing the height fixes everything else and the pitch stays measurable. */
+/* Width follows the frame height; the plate is 16:10. */
 .sheet {
   position: relative;
   flex: 1;
@@ -328,8 +306,7 @@ html.is-loading body {
   flex-direction: column;
   gap: var(--frame-gap);
   padding-top: var(--strip-pad, 0px);
-  /* Wide enough that the sprockets are a margin rather than a fourth line
-     crowding the loupe's edge. */
+  /* Keeps the sprockets clear of the frames. */
   padding-inline: 34px;
 }
 
@@ -337,9 +314,7 @@ html.is-loading body {
   display: block;
 }
 
-/* Not quite full strength: the strip is a proof sheet, and holding it a
-   little off black keeps it behind the panel it feeds rather than competing
-   with it. */
+/* Held off full black so the strip sits behind the panel it feeds. */
 .sheet__frame img {
   opacity: 0.92;
 }
@@ -364,19 +339,20 @@ html.is-loading body {
   color: var(--ink);
 }
 
+/* --ink-soft, not --paper-soft: the soft paper tone is for type on ink, and
+   on the paper sheet it measures 2.06:1. */
 .sheet__caption {
   display: block;
   margin-top: 8px;
-  color: var(--paper-soft);
+  color: var(--ink-soft);
 }
 
 .sheet__frame.is-active .sheet__caption {
   color: var(--ink);
 }
 
-/* The glass. A clipped second copy of the strip, not a filter — so the dots
-   themselves get bigger, which is what a loupe on a contact sheet does. The
-   clip is zero-area until the geometry has been measured. */
+/* A clipped second copy of the strip, not a filter, so the dots themselves
+   get bigger. Zero-area until the geometry has been measured. */
 .sheet__lens,
 .sheet__loupe {
   display: none;
@@ -388,24 +364,18 @@ html.is-loading body {
   inset: 0;
   background: var(--paper);
   clip-path: inset(
-    var(--lens-top)
-    calc(100% - var(--lens-left) - var(--lens-w))
-    calc(100% - var(--lens-top) - var(--lens-h))
-    var(--lens-left)
+    var(--lens-top) calc(100% - var(--lens-left) - var(--lens-w))
+      calc(100% - var(--lens-top) - var(--lens-h)) var(--lens-left)
   );
 }
 
-/* Nearest-neighbour under the glass. Magnifying a printed screen shows hard
-   dot edges; interpolating them would show a softer version of the same
-   picture, which is the one thing a magnifier must not do. */
+/* Nearest-neighbour: a magnifier over print shows hard dot edges. */
 .sheet__strip--ghost img {
   image-rendering: pixelated;
 }
 
-/* Under the glass the loupe's own outline is the frame edge. The copy's
-   border and number plate would sit a few pixels inside it, and three
-   hairlines within six pixels of each other read as a printing fault rather
-   than as a magnifier. */
+/* Under the glass the loupe's outline is the frame edge; a second border and
+   number plate inside it read as a printing fault. */
 .sheet__strip--ghost .sheet__plate {
   border: none;
 }
@@ -437,11 +407,8 @@ html.is-loading body {
   inset: 0;
 }
 
-/* The glass is one line sitting exactly on the frame's own border, with the
-   trim marks the rest of the site uses at its corners. An offset second
-   outline was tried here and read as a plate out of register rather than as a
-   magnifier — with the box aligned to the frame, the only thing that should
-   differ inside it is the size of the dots. */
+/* One line on the frame's own border, plus the corner marks. Aligned to the
+   frame, so the only thing that differs inside it is the size of the dots. */
 .sheet__loupe::before {
   inset: -5px;
   border-color: transparent;
@@ -462,11 +429,9 @@ html.is-loading body {
   transform-origin: left center;
 }
 
-/* Stacked: nothing is competing for a fixed height, so the image takes a
-   share of the width instead of what the panel has left over. */
-/* Stacked. Below the desktop breakpoint the section is CSS and nothing else:
-   no pin, no scrub, no entry wipes, no index. Four projects, one after
-   another, at the speed the thumb moves them. */
+/* Stacked: the image takes a share of the width, not of the panel. */
+/* Stacked. Below the breakpoint the section is CSS and nothing else: no pin,
+   no scrub, no entry wipes, no index. */
 @media (max-width: 1023px), (prefers-reduced-motion: reduce) {
   .detail__media {
     flex: none;
@@ -483,10 +448,8 @@ html.is-loading body {
     display: none;
   }
 
-  /* One rule owns the rhythm between projects. `.detail` carries a flex gap
-     of its own from the default stacked layout, and leaving that in place put
-     two independent values between every pair of sheets — which is how a
-     67px gap turned into 119px of paper without either number looking wrong. */
+  /* `.detail` carries a flex gap of its own; leaving it in place put two
+     independent values between every pair of sheets. */
   .detail {
     gap: 0;
   }
@@ -497,8 +460,7 @@ html.is-loading body {
     border-top: 1px solid var(--paper-soft);
   }
 
-  /* Thumb-sized targets. The links are small type by design; the tap area
-     does not have to be. */
+  /* The links are small type; the tap area does not have to be. */
   .detail__panel a {
     display: inline-flex;
     min-height: 44px;
@@ -511,15 +473,9 @@ html.is-loading body {
     height: 100svh;
   }
 
-  /* The strip has an intrinsic width — the frame height times sixteen tenths,
-     plus its sprockets — so it gets a column that size rather than a share of
-     twelve. Fitting it into a twelve-column grid left a third of the left
-     column empty, which read as a hole in the spread rather than as margin.
-
-     minmax(0, 1fr) on the row rather than the default auto: an auto row is
-     sized by its tallest item, so the panel would grow to fit its own content
-     and push the foot of the longest project off the pinned sheet instead of
-     being told how much room it has. */
+  /* minmax(0, 1fr) on the row, not the default auto: an auto row is sized by
+     its tallest item, so the panel would grow to fit its own content and push
+     the foot of the longest project off the pinned sheet. */
   .projects__grid {
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
@@ -564,23 +520,40 @@ html.is-loading body {
   }
 }
 
-/* The page index: a contents list set in the right margin.
-   Hugs the viewport edge rather than the page margin, so its resting width —
-   a leader and two digits — sits outside the column the content uses. Titles
-   appear on hover and do cross into it, which is the one moment it is allowed
-   to. Nothing transitions: the leader changes length as a cut. */
+/* Off-screen until focused. Not `display: none`, which would take it out of
+   the tab order. */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: var(--page-margin);
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--paper);
+  color: var(--ink);
+  transform: translateY(-120%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* The page index: a contents list set in the right margin. Hugs the viewport
+   edge so its resting width sits outside the content column. Nothing
+   transitions — the leader changes length as a cut. */
 .page-index {
   position: fixed;
   top: 50%;
   right: clamp(0.375rem, 1vw, 0.75rem);
   z-index: 40;
   transform: translateY(-50%);
-  color: var(--paper-hi);
-  mix-blend-mode: difference;
-  /* The rows take the clicks; the box between them does not. Five invisible
-     44px targets down the edge of every section would swallow anything the
-     page puts near its right margin. */
+  /* Set to the ground it is over. See PageIndex. */
+  color: var(--ink);
+  /* The rows take the clicks, not the box between them. */
   pointer-events: none;
+}
+
+.page-index.on-ink {
+  color: var(--paper);
 }
 
 .page-index__page {
@@ -593,8 +566,7 @@ html.is-loading body {
   pointer-events: auto;
 }
 
-/* Out of flow, so a hidden title costs the row no width — the whole index is
-   a leader and two digits wide until you point at it. */
+/* Out of flow: a hidden title must cost the row no width. */
 .page-index__name {
   position: absolute;
   right: calc(100% + 0.5rem);
@@ -602,8 +574,7 @@ html.is-loading body {
   white-space: nowrap;
 }
 
-/* The box is a fixed 24px at every state and only the drawn rule changes
-   length, so the numbers never move. */
+/* Fixed box, only the drawn rule changes length, so the numbers never move. */
 .page-index__leader {
   display: block;
   width: 16px;
@@ -615,6 +586,7 @@ html.is-loading body {
 .page-index__n {
   width: 1.6em;
   text-align: right;
+  /* 0.55 of --ink on paper measures 5.6:1. */
   opacity: 0.55;
 }
 
@@ -644,8 +616,7 @@ html.is-loading body {
   opacity: 1;
 }
 
-/* No pointer to hover with, so the titles would never be reachable and the
-   leaders only take room. Numbers alone, which is what a page number is. */
+/* No pointer to hover with: numbers alone. */
 @media (hover: none), (max-width: 640px) {
   .page-index__name,
   .page-index__leader {
@@ -657,9 +628,8 @@ html.is-loading body {
   }
 }
 
-/* The label plate that follows the pointer. Fixed, blended, and out of the
-   way of everything: it is decoration over a cursor that is still the real
-   one underneath. */
+/* The label plate that follows the pointer. The real cursor is still
+   underneath it. */
 .cursor-plate {
   position: fixed;
   top: 0;
@@ -677,8 +647,6 @@ html.is-loading body {
   opacity: 0;
   visibility: hidden;
   mix-blend-mode: difference;
-  /* Offset from the pointer so the plate never sits under the crosshair it
-     is labelling. */
   translate: 18px 14px;
 }
 
@@ -688,8 +656,8 @@ html.is-loading body {
   }
 }
 
-/* Ink bleed is gated on a class the preloader adds when it finishes, so the
-   filter can never delay the first paint of the wordmark. */
+/* Gated on a class the preloader adds, so the filter cannot delay the first
+   paint of the wordmark. */
 .printed .ink-bleed {
   filter: url('#ink-bleed');
 }
@@ -700,9 +668,8 @@ html.is-loading body {
     animation: none;
   }
 
-  /* No loop runs, so a single overflowing strip would cut the list off at the
-     viewport edge. Wrap it instead and show every item once. Done in CSS
-     rather than a JS branch so the server and client render the same markup. */
+  /* No loop runs, so wrap the row and show every item once. CSS rather than a
+     JS branch, so server and client render the same markup. */
   .marquee {
     overflow: visible;
   }

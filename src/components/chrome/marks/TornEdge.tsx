@@ -1,21 +1,12 @@
 /**
- * The ragged edge of a paper panel.
+ * The ragged edge of a paper panel: a fixed-height strip against the panel,
+ * not a clip-path on it (an objectBoundingBox clip scales with its box) and a
+ * repeating mask, not a stretched svg (a path squeezed into a narrow column
+ * turns every catch into a needle). Masking rather than filling keeps
+ * currentColor working.
  *
- * Drawn as a fixed-height strip against the panel edge rather than as a
- * clip-path on the panel: an objectBoundingBox clip scales with its box, so
- * the same tear would be 4px deep on the hero and 30px deep on a short block.
- *
- * The strip is a repeating mask rather than a stretched svg for the same
- * reason in the other axis. A single `preserveAspectRatio="none"` path
- * squeezed from 1440 into a 320px column turns every catch into a needle.
- * A 600px tile repeats instead of distorting, so a tear looks the same on a
- * full-bleed panel and on a quarter-width one. Masking rather than filling
- * keeps `currentColor` working.
- *
- * Four edges, assigned by index at the call site so a given panel always
- * tears the same way. Each was drawn by hand — long smooth runs with two or
- * three sharp catches, and matching heights at x=0 and x=600 so the tile
- * repeats seamlessly. That shape is what a noise function will not give you.
+ * Four hand-drawn edges, assigned by index at the call site. Heights match at
+ * x=0 and x=600 so the tile repeats seamlessly.
  */
 
 const EDGES = [
@@ -51,11 +42,9 @@ export function TornEdge({ variant, side = 'bottom', className }: Props) {
         display: 'block',
         width: '100%',
         height: TORN_EDGE_HEIGHT,
-        // Tuck the strip a pixel under its panel. The mask's straight edge
-        // sits exactly on the element's boundary, and on a fractional device
-        // pixel ratio the browser antialiases that row to about half alpha —
-        // which shows as a hairline of the ground colour across the full
-        // width, a few pixels above the tear. The panel's own paper covers it.
+        // Tucked a pixel under the panel. On a fractional device pixel ratio
+        // the browser antialiases the mask's straight edge to half alpha,
+        // which shows as a hairline above the tear.
         marginTop: side === 'bottom' ? -1 : undefined,
         marginBottom: side === 'top' ? -1 : undefined,
         background: 'currentColor',

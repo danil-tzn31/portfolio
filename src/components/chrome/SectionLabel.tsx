@@ -21,9 +21,12 @@ export function SectionLabel({
 
   return (
     <div>
-      <p className={`type-meta ${onPaper ? 'text-ink-soft' : 'text-paper-soft'}`}>
+      {/* An h2, not a paragraph. It is the section's heading whatever it is
+          set at, and without it the project and contact h3s sit under an h1
+          with nothing in between. */}
+      <h2 className={`type-meta ${onPaper ? 'text-ink-soft' : 'text-paper-soft'}`}>
         {n} &middot; {children}
-      </p>
+      </h2>
       <Rule className={`mt-3 ${onPaper ? 'text-ink' : 'text-paper'}`} />
     </div>
   );

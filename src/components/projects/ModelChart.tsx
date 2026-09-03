@@ -3,17 +3,13 @@ import model from '@/data/watch-model.json';
 type Entry = { name: string; value: number };
 
 /**
- * Project 04 has no screenshot, and a screenshot of a notebook would be the
- * weakest frame on the page. This draws the result instead: R² by model, in
- * the site's own type and colour.
- *
- * Inline SVG rather than a chart library. Ten bars do not justify a
- * dependency, and drawing them by hand means they inherit `currentColor` and
- * the type tokens for free.
+ * Project 04 has no screenshot, so this draws its result instead: R² by
+ * model. Inline SVG rather than a chart library — ten bars do not justify a
+ * dependency, and drawn by hand they inherit currentColor and the type tokens.
  */
 
-/* User units, at roughly the box's real proportions so the fit scales the
-   drawing by about one and the 11px labels stay 11px. */
+/* User units, at roughly the box's real proportions so the fit scales by about
+   one and the 11px labels stay 11px. */
 const W = 860;
 const ROWS = 10;
 const ROW_H = 24;
@@ -26,8 +22,8 @@ const BAR_MAX = W - LABEL_W - 12;
 const BAR_H = 10;
 const TICKS = [0, 0.5, 1];
 
-/* Ten rows of nothing is a blank box. Ten ruled rows of different lengths is
-   a form waiting to be filled in, which is what this actually is. */
+/* The empty state: ruled rows, so it reads as a form waiting to be filled in
+   rather than as a blank box. */
 const RULED = [0.62, 0.48, 0.71, 0.55, 0.4, 0.66, 0.52, 0.58, 0.45, 0.68];
 
 export function ModelChart() {
@@ -48,7 +44,14 @@ export function ModelChart() {
           : `Coefficient of determination by model. Best: ${model.best}.`
       }
     >
-      <text x={0} y={TOP - 8} fontSize={11} letterSpacing="0.16em" fill="currentColor" opacity={0.7}>
+      <text
+        x={0}
+        y={TOP - 8}
+        fontSize={11}
+        letterSpacing="0.16em"
+        fill="currentColor"
+        opacity={0.7}
+      >
         {model.metric.toUpperCase()} BY MODEL
       </text>
 
@@ -102,10 +105,16 @@ export function ModelChart() {
 
             return (
               <g key={entry.name}>
-                {/* The best model is the only filled bar and the only inverted
-                    label. One emphasis, and no legend to explain it. */}
+                {/* The best model is the only filled bar and the only
+                    inverted label — one emphasis, and no legend for it. */}
                 {best && (
-                  <rect x={0} y={rowY(i) + 2} width={LABEL_W - 14} height={ROW_H - 5} fill="currentColor" />
+                  <rect
+                    x={0}
+                    y={rowY(i) + 2}
+                    width={LABEL_W - 14}
+                    height={ROW_H - 5}
+                    fill="currentColor"
+                  />
                 )}
                 <text
                   x={best ? 6 : 0}
@@ -131,8 +140,22 @@ export function ModelChart() {
 
       {empty && (
         <g transform={`translate(${LABEL_W + BAR_MAX / 2} ${TOP + (ROWS * ROW_H) / 2}) rotate(-2)`}>
-          <rect x={-148} y={-20} width={296} height={40} fill="var(--paper)" stroke="currentColor" />
-          <text x={0} y={5} fontSize={12} letterSpacing="0.16em" textAnchor="middle" fill="currentColor">
+          <rect
+            x={-148}
+            y={-20}
+            width={296}
+            height={40}
+            fill="var(--paper)"
+            stroke="currentColor"
+          />
+          <text
+            x={0}
+            y={5}
+            fontSize={12}
+            letterSpacing="0.16em"
+            textAnchor="middle"
+            fill="currentColor"
+          >
             AWAITING MODEL EXPORT
           </text>
         </g>

@@ -2,11 +2,7 @@ import Image from 'next/image';
 import { Sprockets } from '@/components/chrome/marks/Sprockets';
 import { projects } from '@/data/projects';
 
-/**
- * Project 04 has no screenshot. At thumbnail size a chart is a stack of bars
- * — the same ranking the detail panel draws, with the labels dropped because
- * nobody reads 4px type.
- */
+/** Project 04 has no screenshot: the detail panel's ranking, without labels. */
 const BARS = [0.86, 0.74, 0.68, 0.61, 0.55, 0.47, 0.38, 0.22];
 
 function ChartTile() {
@@ -27,9 +23,8 @@ function ChartTile() {
 }
 
 /**
- * The strip itself. Rendered twice: once for real, and once inside the loupe
- * at magnification. The copy is `aria-hidden` and its links are out of the tab
- * order, so a screen reader hears four projects rather than eight.
+ * Rendered twice: once for real, once inside the loupe at magnification. The
+ * copy is out of the tab order, so a screen reader hears four, not eight.
  */
 function Strip({ ghost }: { ghost?: boolean }) {
   return (
@@ -42,14 +37,15 @@ function Strip({ ghost }: { ghost?: boolean }) {
           rel="noreferrer"
           data-frame={i}
           tabIndex={ghost ? -1 : undefined}
-          aria-label={ghost ? undefined : `Project ${project.n} — ${project.title}`}
           className="sheet__frame"
         >
+          {/* Extends the accessible name rather than overriding it with an
+              aria-label, which would then have to repeat the visible text. */}
+          {!ghost && <span className="sr-only">{`${project.title}, project ${project.n}`}</span>}
           <span className="sheet__plate">
             {project.media.kind === 'plate' ? (
-              // A screen of its own, coarser than the detail panel's: a
-              // 1600px dither shown at 280px is texture, not dots, and the
-              // loupe needs something it can visibly enlarge.
+              // Its own screen, coarser than the detail panel's: a 1600px
+              // dither shown at 280px is texture, not dots.
               <Image
                 src={`/media/${project.media.base}-thumb.png`}
                 alt=""
@@ -71,12 +67,9 @@ function Strip({ ghost }: { ghost?: boolean }) {
 }
 
 /**
- * A contact sheet under a loupe. The loupe is fixed and the strip moves,
- * which is what a scrub-driven pin gives for free and what makes this read as
- * a light table rather than as a carousel.
- *
- * The magnification is a second copy of the strip clipped to the loupe, not a
- * filter — so the halftone dots actually get bigger under the glass.
+ * A contact sheet under a loupe: the glass is fixed and the strip moves. The
+ * magnification is a second copy clipped to the loupe rather than a filter,
+ * so the halftone dots actually get bigger under it.
  */
 export function ContactSheet() {
   return (
@@ -90,9 +83,8 @@ export function ContactSheet() {
         <Strip ghost />
       </div>
 
-      {/* The glass carries the frame number, because it is covering the one
-          the strip drew. It sits in exactly the same place, so the number does
-          not appear to go missing when the loupe reaches a frame. */}
+      {/* The glass redraws the frame number in the same place, because it is
+          covering the one the strip drew. */}
       <div className="sheet__loupe" aria-hidden="true">
         <span className="sheet__n sheet__loupe-n type-meta" />
       </div>

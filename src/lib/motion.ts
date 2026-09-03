@@ -1,6 +1,6 @@
 /**
- * Every duration, ease and scrub value on the site. No numeric literal for
- * timing appears anywhere else: one system, tuned in one place.
+ * Every duration, ease and scrub value on the site. No timing literal appears
+ * anywhere else.
  */
 
 /** Seconds. */
@@ -9,8 +9,7 @@ export const D = {
   cut: 0.06,
   /** The scan bar covering a panel. */
   scan: 0.16,
-  /** The scan bar clearing it. Longer than the cover, so it reads as a reveal
-      rather than as a shutter closing and opening at the same speed. */
+  /** The scan bar clearing it — longer than the cover, so it reads as a reveal. */
   reveal: 0.2,
   /** Stamp, snap. */
   snap: 0.22,
@@ -27,21 +26,13 @@ export const D = {
 export const E = {
   /** Arrivals: fast in, long settle. */
   out: 'power4.out',
-  /** Departures: something leaving the frame under its own weight. */
+  /** Departures. */
   in: 'power3.in',
-  /**
-   * Arrivals that carry on past the eye rather than stopping dead. Gentler
-   * than `out`, which is too abrupt for a move measured in tenths.
-   */
+  /** Gentler arrivals, for moves measured in tenths. */
   settle: 'power3.out',
   /** Two-sided moves: panels, bands. */
   inOut: 'power3.inOut',
-  /**
-   * Long two-sided moves that must not whip. power3.inOut spends a quarter of
-   * a second near-stationary at each end and covers 60% of the distance in the
-   * middle 200ms — fine at 0.3s, but at 1s it reads as a fast move with dead
-   * air around it rather than a slow one.
-   */
+  /** Long two-sided moves. power3.inOut whips at this length. */
   even: 'power1.inOut',
   /** Rules and strokes drawing themselves. */
   draw: 'expo.out',
@@ -57,10 +48,7 @@ export const SCRUB = {
   loose: 0.9,
 } as const;
 
-/**
- * ScrollTrigger snap. Short, and with a delay long enough that it waits for
- * the wheel to stop rather than pulling against a scroll still in progress.
- */
+/** ScrollTrigger snap. The delay waits for the wheel to stop. */
 export const SNAP = {
   duration: 0.25,
   delay: 0.04,

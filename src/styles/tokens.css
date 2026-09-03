@@ -14,16 +14,11 @@
   --fs-quote: clamp(1.75rem, 1.2rem + 2.6vw, 3.25rem);
   --fs-title: clamp(2.5rem, 1.4rem + 5.2vw, 6rem);
   --fs-display: clamp(3.5rem, 0.5rem + 13vw, 15rem);
-  /* The marquee. Big enough to be the section rather than a caption strip. */
   --fs-marquee: clamp(2rem, 4.2vw, 4.25rem);
 
-  /* The hero wordmark: all three lines at one size, so the widest of them
-     decides how large the block can be. Two limits, whichever is smaller.
-     Width: MARTIN measures 3.94em at this tracking, and the line has to clear
-     the page margin and the role slip. Height: three lines at --lh-mark have
-     to leave room for the masthead, statement and footer, which come to about
-     18rem. Both limits are viewport-proportional, so the mark fills the sheet
-     at any size without pushing anything below the fold. */
+  /* The hero wordmark, all three lines at one size. Two limits, whichever is
+     smaller: the width MARTIN needs, and the height left over once the
+     masthead, statement and footer have taken their ~18rem. */
   --fs-mark: min(23vw, calc((100svh - 20rem) / 2.4));
   --lh-mark: 0.78;
 
@@ -44,34 +39,30 @@
   --gutter: clamp(0.75rem, 1.6vw, 1.5rem);
   --measure: 105rem;
 
-  /* The three contact addresses, all at one size and all on one line.
-     Sized from the width actually available rather than from a viewport
-     fraction: the longest of them is twenty-four characters of Extrabold,
-     which measures about 15em, so the type can be as large as that measure
-     divided by 13.2 and no larger — 24 characters of this face measure about
-     0.48em each, and the tenth of an em of slack is what keeps the tail of
-     .com off the page margin. --arrow-col is the space the trailing marks
-     occupy, and it comes out of the same sum. */
+  /* The three contact addresses, one size, one line each. Sized from the width
+     actually available, not a viewport fraction. The divisor is measured, not
+     guessed: 24 characters of this face at Extrabold run about 0.48em each,
+     and 13.2 is what keeps the tail of .com off the page margin. */
   --arrow-col: clamp(2rem, 4vw, 4.5rem);
   --fs-contact: min(
     6rem,
-    calc((min(100vw, var(--measure)) - 2 * var(--page-margin) - var(--arrow-col) - var(--gutter)) / 13.2)
+    calc(
+      (min(100vw, var(--measure)) - 2 * var(--page-margin) - var(--arrow-col) - var(--gutter)) /
+        13.2
+    )
   );
 
-  /* The contact sheet. Frame height is the only free value — the width
-     follows at 16:10, the pitch is height plus caption plus gap, and the
-     loupe is one whole frame plus a bleed on every side. Sized so three
-     frames and part of a fourth are in the sheet at once: fewer reads as a
-     slideshow, more and the frames are too small to be worth magnifying. */
+  /* The contact sheet. Frame height is the only free value — width follows at
+     16:10 and the pitch is height plus caption plus gap. Sized so three frames
+     and part of a fourth are on the sheet at once. */
   --frame-h: clamp(7rem, 19vh, 11rem);
   --frame-gap: clamp(0.75rem, 2vh, 1.25rem);
-  /* The glass sits exactly on the frame. Any bleed at all makes the frame
-     under the loupe wider than the three above and below it, and a strip
-     whose edges do not line up reads as a mistake rather than as a magnifier. */
+  /* Zero, so the glass sits exactly on the frame. Any bleed makes the frame
+     under the loupe wider than the ones above and below it. */
   --lens-bleed: 0px;
 
-  /* Print defects. One offset and one angle, reused everywhere: a single
-     repeated value reads as a press fault, varied ones read as noise. */
+  /* Print defects. One offset and one angle, reused everywhere: a repeated
+     value reads as a press fault, varied ones read as noise. */
   --slip: 6px;
   --tilt: 1.4deg;
 }

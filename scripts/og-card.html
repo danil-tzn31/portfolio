@@ -1,0 +1,69 @@
+<!doctype html>
+<!--
+  The source for src/app/opengraph-image.png.
+
+  Rendered to a raster once and committed, rather than generated per request
+  with next/og: Satori cannot read woff2, and the alternative — shipping a raw
+  TTF of a licensed face — is worse than shipping a picture of it. Regenerate
+  with scripts/make-og.mjs after any change here.
+-->
+<meta charset="utf-8" />
+<style>
+  @font-face {
+    font-family: 'Montreal';
+    font-weight: 800;
+    src: url('../public/fonts/PPNeueMontreal-Extrabold.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'MontrealText';
+    font-weight: 400;
+    src: url('../public/fonts/PPNeueMontrealText-Book.woff2') format('woff2');
+  }
+  * { margin: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 630px;
+    padding: 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #0b0b0b;
+    color: #edeae3;
+  }
+  .meta {
+    font-family: MontrealText, sans-serif;
+    font-size: 17px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    display: flex;
+    justify-content: space-between;
+  }
+  .mark {
+    font-family: Montreal, sans-serif;
+    font-weight: 800;
+    font-size: 132px;
+    line-height: 0.84;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+  }
+  .rule { height: 1px; background: #edeae3; opacity: 0.35; margin: 34px 0 26px; }
+  .foot { font-family: MontrealText, sans-serif; font-size: 17px; letter-spacing: 0.16em; text-transform: uppercase; }
+  /* The site's signature, and the only ornament the card gets. */
+  /* The same hand-drawn edge the page panels use, tile and all. */
+  .tear { position: absolute; left: 0; right: 0; bottom: 0; height: 20px; background: #edeae3;
+          -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%2220%22%20viewBox%3D%220%200%20600%2020%22%3E%3Cpath%20d%3D%22M0%200H600V10L570%2012.4L512%209.1L498%2016.8L486%209.6L432%2011.9L370%208.2L318%2012.6L262%2010.1L250%204.2L238%2010.8L186%2013.1L124%209.4L62%2011.6L0%2010Z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E"); mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%2220%22%20viewBox%3D%220%200%20600%2020%22%3E%3Cpath%20d%3D%22M0%200H600V10L570%2012.4L512%209.1L498%2016.8L486%209.6L432%2011.9L370%208.2L318%2012.6L262%2010.1L250%204.2L238%2010.8L186%2013.1L124%209.4L62%2011.6L0%2010Z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E");
+          -webkit-mask-repeat: repeat-x; mask-repeat: repeat-x;
+          -webkit-mask-size: 600px 20px; mask-size: 600px 20px; transform: scaleY(-1); }
+</style>
+<body>
+  <div class="meta"><span>Issue 01</span><span>Portfolio · 2026</span></div>
+  <div>
+    <div class="mark">Daniel<br />Martin<br />Tizon</div>
+  </div>
+  <div>
+    <div class="rule"></div>
+    <div class="foot">Junior developer · Dasmariñas, Cavite, PH</div>
+  </div>
+  <div class="tear"></div>
+</body>

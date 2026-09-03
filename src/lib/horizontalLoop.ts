@@ -1,16 +1,12 @@
 import { gsap } from './gsap';
 
 /**
- * A seamless horizontal marquee, adapted from GSAP's published helper.
- *
- * Trimmed to what this site uses: the wrap maths and a timeline whose
- * `timeScale` can be driven from outside. The original's `next`/`previous`/
- * `toIndex` navigation and its snapping options are gone — the marquee never
- * jumps to an index, and copied-in branches nobody calls are exactly the dead
- * weight §9.1 forbids.
+ * A seamless horizontal marquee, adapted from GSAP's published helper and
+ * trimmed to the wrap maths plus a timeline whose `timeScale` is driven from
+ * outside. The original's index navigation and snapping options are unused.
  *
  * Direction is a negative `timeScale`, not `reverse()`, so scroll velocity can
- * push a row through zero and out the other side without any state to track.
+ * push a row through zero and out the other side with no state to track.
  */
 type Options = {
   /** Multiplier on 100px per second. */

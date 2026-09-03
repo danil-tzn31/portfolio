@@ -5,13 +5,9 @@ import { gsap, useGSAP } from '@/lib/gsap';
 import { D, E } from '@/lib/motion';
 
 /**
- * The real crosshair is never hidden — the body keeps `cursor: crosshair`, so
- * the site is unchanged if this layer never mounts.
- *
- * What this adds is one thing: over anything you can click, a small plate
- * follows the pointer and says what clicking does. Drawing a second crosshair
- * on top of the real one, as the plan first had it, puts two crosshairs on
- * screen with the drawn one lagging a third of a second behind the real one.
+ * Over anything clickable, a small plate follows the pointer and says what
+ * clicking does. The real crosshair is never hidden — the body keeps
+ * `cursor: crosshair`, so the site is unchanged if this never mounts.
  *
  * `mix-blend-mode: difference` inverts the plate and its label together, so
  * one element reads on both the paper sections and the ink ones.

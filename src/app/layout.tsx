@@ -5,6 +5,7 @@ import { Grain } from '@/components/chrome/Grain';
 import { PageIndex } from '@/components/chrome/PageIndex';
 import { GridOverlay } from '@/components/chrome/GridOverlay';
 import { PrintDefs } from '@/components/chrome/marks/PrintDefs';
+import { personJsonLd, siteDescription, siteName, siteTitle, siteUrl } from '@/lib/site';
 import { SmoothScroll } from '@/lib/smooth-scroll';
 import './globals.css';
 
@@ -35,14 +36,33 @@ const eiko = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Daniel Martin Tizon',
-  description: 'Portfolio of Daniel Martin Tizon, a Computer Engineering graduate and developer.',
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
+  alternates: { canonical: '/' },
+  authors: [{ name: siteName, url: siteUrl }],
+  creator: siteName,
+  openGraph: {
+    type: 'profile',
+    title: siteTitle,
+    description: siteDescription,
+    url: '/',
+    siteName,
+    locale: 'en_PH',
+  },
+  twitter: { card: 'summary_large_image', title: siteTitle, description: siteDescription },
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={`${montreal.variable} ${montrealText.variable} ${eiko.variable}`}>
       <body>
+        {/* First thing in the tab order, and the only thing that moves the
+            page for you. Off-screen until it has focus. */}
+        <a href="#about" className="skip-link type-meta">
+          Skip to content
+        </a>
+
         {children}
         <SmoothScroll />
         <PageIndex />
@@ -50,6 +70,13 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <Grain />
         <PrintDefs />
         {process.env.NODE_ENV === 'development' && <GridOverlay />}
+
+        <script
+          type="application/ld+json"
+          // Structured data is markup, not content: it is the one place a
+          // string has to reach the document verbatim.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
       </body>
     </html>
   );
