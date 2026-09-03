@@ -5,7 +5,11 @@ export type Project = {
   year: string;
   /** One sentence, written for a reader who is not an engineer. */
   plain: string;
-  /** Exactly two, one line each — restraint rule 7. */
+  /**
+   * Exactly two, and each one has to hold a single line at the narrowest
+   * viewport the panel runs at — restraint rule 7. That is about fifty
+   * characters. A bullet that wraps stops being a bullet.
+   */
   does: readonly [string, string];
   stack: readonly string[];
   links: { live?: string; source: string };
@@ -27,8 +31,8 @@ export const projects: readonly Project[] = [
     year: '2026',
     plain: 'A fan-made archive for the group ARTMS, built as one long scroll through three eras.',
     does: [
-      'One scroll through three eras, with member profiles and photography.',
-      'Images, video and fonts processed at build time so it loads fast on a phone.',
+      'One scroll through three eras of the group.',
+      'Media processed at build time to keep it fast.',
     ],
     stack: ['Vite', 'React 19', 'TypeScript', 'Tailwind v4', 'GSAP', 'Lenis', 'sharp', 'ffmpeg'],
     links: {
@@ -45,8 +49,8 @@ export const projects: readonly Project[] = [
     plain:
       'Turns an album cover into a mood board — colours, a mood label, and artists that sound like it.',
     does: [
-      'Pulls the dominant colours off the artwork and names the mood from them.',
-      'Suggests similar artists, plays a preview, and copies any swatch on click.',
+      'Reads the artwork’s colours and names the mood.',
+      'Suggests artists that sound like it, with previews.',
     ],
     stack: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'Express', 'iTunes API', 'Last.fm API'],
     links: {
@@ -62,8 +66,8 @@ export const projects: readonly Project[] = [
     year: '2026',
     plain: 'A Philippine travel booking site, rebuilt from an old PHP and SQL Server codebase.',
     does: [
-      'Search and book flights and hotels, with accounts and Stripe checkout in test mode.',
-      'A shareable confirmation page laid out like a boarding pass.',
+      'Books flights and hotels, Stripe in test mode.',
+      'A confirmation page laid out like a boarding pass.',
     ],
     stack: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Auth.js', 'Stripe', 'Tailwind'],
     links: {
@@ -79,10 +83,7 @@ export const projects: readonly Project[] = [
     year: '2026',
     plain:
       'Estimates what a luxury watch should cost from its specifications, and checks nine models to see which does it best.',
-    does: [
-      'Cleans the data, then trains nine regression models tuned with GridSearchCV.',
-      'Lasso came out best at R² 0.87, checked on residual and predicted-vs-actual plots.',
-    ],
+    does: ['Nine regression models, tuned with GridSearchCV.', 'Lasso came out best, at R² 0.87.'],
     stack: ['Python', 'pandas', 'NumPy', 'scikit-learn', 'matplotlib', 'seaborn', 'Jupyter'],
     links: { source: 'https://github.com/danil-tzn31/Luxury-Watch-Price-Prediction' },
     plate: 'watch',

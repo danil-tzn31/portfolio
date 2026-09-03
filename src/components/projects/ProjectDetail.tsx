@@ -48,11 +48,14 @@ export function ProjectDetail({ project }: { project: Project }) {
 
       <p className="type-editorial max-w-[54ch] shrink-0">{project.plain}</p>
 
+      {/* Set like the records in the about spread — same role, same marker.
+          At meta size with meta tracking these were two wrapped lines of
+          letter-spaced small caps, which is a label, not a sentence. */}
       <ul className="shrink-0 space-y-2">
         {project.does.map((line) => (
-          <li key={line} className="type-meta flex gap-3 text-ink-soft">
+          <li key={line} className="type-editorial flex gap-3 text-ink-soft">
             <span aria-hidden="true">—</span>
-            <span className="max-w-[62ch] normal-case">{line}</span>
+            <span>{line}</span>
           </li>
         ))}
       </ul>
