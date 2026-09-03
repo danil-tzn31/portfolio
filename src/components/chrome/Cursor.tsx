@@ -38,7 +38,10 @@ export function Cursor() {
       y(event.clientY);
 
       const hit = (event.target as Element | null)?.closest?.('a, button');
-      const word = hit ? WORD[hit.tagName as keyof typeof WORD] : undefined;
+      // Not over the page index: its rows name themselves on hover, and the
+      // plate would land on the very numbers it is standing next to.
+      const word =
+        hit && !hit.closest('.page-index') ? WORD[hit.tagName as keyof typeof WORD] : undefined;
 
       if (word && el.textContent !== word) el.textContent = word;
 

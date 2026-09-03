@@ -564,6 +564,99 @@ html.is-loading body {
   }
 }
 
+/* The page index: a contents list set in the right margin.
+   Hugs the viewport edge rather than the page margin, so its resting width —
+   a leader and two digits — sits outside the column the content uses. Titles
+   appear on hover and do cross into it, which is the one moment it is allowed
+   to. Nothing transitions: the leader changes length as a cut. */
+.page-index {
+  position: fixed;
+  top: 50%;
+  right: clamp(0.375rem, 1vw, 0.75rem);
+  z-index: 40;
+  transform: translateY(-50%);
+  color: var(--paper-hi);
+  mix-blend-mode: difference;
+  /* The rows take the clicks; the box between them does not. Five invisible
+     44px targets down the edge of every section would swallow anything the
+     page puts near its right margin. */
+  pointer-events: none;
+}
+
+.page-index__page {
+  position: relative;
+  display: flex;
+  height: 44px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.375rem;
+  pointer-events: auto;
+}
+
+/* Out of flow, so a hidden title costs the row no width — the whole index is
+   a leader and two digits wide until you point at it. */
+.page-index__name {
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  opacity: 0;
+  white-space: nowrap;
+}
+
+/* The box is a fixed 24px at every state and only the drawn rule changes
+   length, so the numbers never move. */
+.page-index__leader {
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: linear-gradient(currentColor, currentColor) no-repeat right center / 6px 1px;
+  opacity: 0.55;
+}
+
+.page-index__n {
+  width: 1.6em;
+  text-align: right;
+  opacity: 0.55;
+}
+
+.page-index__page.is-active .page-index__leader {
+  background-size: 16px 1px;
+  opacity: 1;
+}
+
+.page-index__page.is-active .page-index__n {
+  opacity: 1;
+}
+
+.page-index__page:hover .page-index__name,
+.page-index__page:focus-visible .page-index__name,
+.page-index__page.is-active:hover .page-index__name {
+  opacity: 1;
+}
+
+.page-index__page:hover .page-index__leader,
+.page-index__page:focus-visible .page-index__leader {
+  background-size: 16px 1px;
+  opacity: 1;
+}
+
+.page-index__page:hover .page-index__n,
+.page-index__page:focus-visible .page-index__n {
+  opacity: 1;
+}
+
+/* No pointer to hover with, so the titles would never be reachable and the
+   leaders only take room. Numbers alone, which is what a page number is. */
+@media (hover: none), (max-width: 640px) {
+  .page-index__name,
+  .page-index__leader {
+    display: none;
+  }
+
+  .page-index__page {
+    height: 40px;
+  }
+}
+
 /* The label plate that follows the pointer. Fixed, blended, and out of the
    way of everything: it is decoration over a cursor that is still the real
    one underneath. */
