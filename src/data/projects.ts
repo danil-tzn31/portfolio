@@ -10,15 +10,13 @@ export type Project = {
   stack: readonly string[];
   links: { live?: string; source: string };
   media: { kind: 'plate'; base: string } | { kind: 'chart' };
-  /** A measured figure, stamped. Never an estimate. */
-  stat?: string;
 };
 
 export const projects: readonly Project[] = [
   {
     n: '01',
     slug: 'ARTMS',
-    title: 'ARTMS Fan Website',
+    title: 'Virtual Angel Archive',
     year: '2026',
     plain: 'A fan-made archive for the group ARTMS, built as one long scroll through three eras.',
     does: [
@@ -28,7 +26,6 @@ export const projects: readonly Project[] = [
     stack: ['Vite', 'React 19', 'TypeScript', 'Tailwind v4', 'GSAP', 'Lenis', 'sharp', 'ffmpeg'],
     links: { live: 'https://artms-website.vercel.app', source: 'https://github.com/danil-tzn31/ARTMS-Website' },
     media: { kind: 'plate', base: 'artms' },
-    stat: 'LCP 0.50s · 127 kB JS',
   },
   {
     n: '02',

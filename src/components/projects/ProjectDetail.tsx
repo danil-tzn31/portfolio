@@ -97,13 +97,6 @@ export function ProjectDetail({ project }: { project: Project }) {
         >
           Source &#8599;
         </a>
-        {project.stat && (
-          // Not uppercased: these are units, and "127 KB" is a different
-          // thing from "127 kB".
-          <p className="type-meta ml-auto rotate-[calc(var(--tilt)*-1)] border border-ink px-2 py-1 normal-case">
-            {project.stat}
-          </p>
-        )}
       </div>
     </article>
   );
