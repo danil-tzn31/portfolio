@@ -37,7 +37,7 @@ export const personJsonLd = {
   },
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Dasmariñas',
+    addressLocality: 'Imus',
     addressRegion: 'Cavite',
     addressCountry: 'PH',
   },

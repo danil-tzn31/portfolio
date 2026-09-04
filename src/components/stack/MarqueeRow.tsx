@@ -1,4 +1,5 @@
 import type { Ref } from 'react';
+import { Asterisk } from '@/components/chrome/marks/Asterisk';
 import { StackMark } from './StackMark';
 import type { StackRow } from '@/data/stack';
 
@@ -34,7 +35,7 @@ export function MarqueeRow({
               >
                 <StackMark item={item} />
                 <span>{item.label}</span>
-                <span className="pl-[0.7em] text-[0.26em] text-ink-soft">&#10033;</span>
+                <Asterisk size="0.34em" className="ml-[0.55em] text-ink-soft" />
               </span>
             )),
           )}

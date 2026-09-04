@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { Masthead } from './Masthead';
 import { Wordmark } from './Wordmark';
+import { Asterisk } from '@/components/chrome/marks/Asterisk';
 import { Rule } from '@/components/chrome/marks/Rule';
 import { TornEdge } from '@/components/chrome/marks/TornEdge';
 import { Preloader } from '@/components/preloader/Preloader';
@@ -59,8 +60,21 @@ export function Hero() {
               on the inner line, not the box: on the box it flips the sizing
               axes and the slip stretches across the page. */}
             <div className="absolute top-1/2 right-[var(--page-margin)] hidden w-fit -translate-y-1/2 border border-ink bg-paper px-2 py-4 lg:block">
+              {/* The roles are separate spans with real whitespace between
+                  them, so the line still reads as five words when the marks
+                  themselves say nothing. */}
               <p className="type-meta [writing-mode:vertical-rl] whitespace-nowrap">
-                {profile.roles.join(' ✳ ')}
+                {profile.roles.map((role, i) => (
+                  <span key={role}>
+                    {i > 0 && (
+                      <>
+                        {' '}
+                        <Asterisk className="text-ink-soft" />{' '}
+                      </>
+                    )}
+                    {role}
+                  </span>
+                ))}
               </p>
             </div>
           </div>
