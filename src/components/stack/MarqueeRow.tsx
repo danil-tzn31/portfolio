@@ -35,7 +35,7 @@ export function MarqueeRow({
               >
                 <StackMark item={item} />
                 <span>{item.label}</span>
-                <Asterisk size="0.34em" className="ml-[0.55em] text-ink-soft" />
+                <Asterisk size="0.34em" className="ml-[0.4em] text-ink-soft" />
               </span>
             )),
           )}

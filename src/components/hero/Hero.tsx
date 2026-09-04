@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { Masthead } from './Masthead';
 import { Wordmark } from './Wordmark';
 import { Asterisk } from '@/components/chrome/marks/Asterisk';
@@ -60,20 +60,26 @@ export function Hero() {
               on the inner line, not the box: on the box it flips the sizing
               axes and the slip stretches across the page. */}
             <div className="absolute top-1/2 right-[var(--page-margin)] hidden w-fit -translate-y-1/2 border border-ink bg-paper px-2 py-4 lg:block">
-              {/* The roles are separate spans with real whitespace between
-                  them, so the line still reads as five words when the marks
-                  themselves say nothing. */}
-              <p className="type-meta [writing-mode:vertical-rl] whitespace-nowrap">
+              {/* Flexed, not inline. In a vertical writing mode `vertical-align:
+                  middle` measures from the alphabetic baseline, which in a
+                  rotated column runs down one side of the type — so an inline
+                  mark lands about a third of the slip's width off centre.
+                  Aligning the boxes instead puts it on the axis of the letters.
+
+                  The spaces between the spans survive for the accessible name;
+                  flex does not render whitespace-only items, so the visible
+                  spacing is the gap and nothing is counted twice. */}
+              <p className="type-meta flex items-center gap-[0.5em] [writing-mode:vertical-rl] whitespace-nowrap">
                 {profile.roles.map((role, i) => (
-                  <span key={role}>
+                  <Fragment key={role}>
                     {i > 0 && (
                       <>
                         {' '}
                         <Asterisk className="text-ink-soft" />{' '}
                       </>
                     )}
-                    {role}
-                  </span>
+                    <span>{role}</span>
+                  </Fragment>
                 ))}
               </p>
             </div>
