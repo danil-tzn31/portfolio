@@ -68,6 +68,14 @@ export const stack: readonly StackRow[] = [
     speed: 0.7,
     direction: 'left',
     items: [
+      // Leading the row: this is the most current work, and a twelve-item row
+      // at this speed takes most of a minute to come round once.
+      // The smile without the wordmark: the full logo spells out the label
+      // standing next to it. The three services below have no mark at all.
+      { label: 'AWS', mark: 'aws' },
+      { label: 'AWS Lambda', tile: 'LA' },
+      { label: 'Amazon Bedrock', tile: 'BR' },
+      { label: 'API Gateway', tile: 'AG' },
       { label: 'Docker', mark: 'docker' },
       { label: 'Postman', mark: 'postman' },
       { label: 'Windows Server', tile: 'WS' },
@@ -76,10 +84,6 @@ export const stack: readonly StackRow[] = [
       { label: 'ServiceDesk Plus', tile: 'SD' },
       { label: 'Power Automate', tile: 'PA' },
       { label: 'VS Code', tile: 'VS' },
-      // The AWS marks are wordmarks too, and Bedrock has none at all.
-      { label: 'AWS Lambda', tile: 'LA' },
-      { label: 'Amazon Bedrock', tile: 'BR' },
-      { label: 'API Gateway', tile: 'AG' },
     ],
   },
 ];

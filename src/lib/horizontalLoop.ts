@@ -5,8 +5,8 @@ import { gsap } from './gsap';
  * trimmed to the wrap maths plus a timeline whose `timeScale` is driven from
  * outside. The original's index navigation and snapping options are unused.
  *
- * Direction is a negative `timeScale`, not `reverse()`, so scroll velocity can
- * push a row through zero and out the other side with no state to track.
+ * Direction is a negative `timeScale`, not `reverse()`, so a row can run either
+ * way with no state to track and no second code path.
  */
 type Options = {
   /** Multiplier on 100px per second. */

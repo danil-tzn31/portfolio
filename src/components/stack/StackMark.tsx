@@ -1,4 +1,4 @@
-import { MARKS } from '@/data/marks';
+import { MARK_VIEWBOX, MARKS } from '@/data/marks';
 import type { StackItem } from '@/data/stack';
 
 /**
@@ -15,7 +15,7 @@ export function StackMark({ item }: { item: StackItem }) {
   if (path) {
     return (
       <svg
-        viewBox="0 0 24 24"
+        viewBox={(item.mark && MARK_VIEWBOX[item.mark]) ?? '0 0 24 24'}
         aria-hidden="true"
         focusable="false"
         className="size-[0.72em] shrink-0"

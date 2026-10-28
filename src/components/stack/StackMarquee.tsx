@@ -5,15 +5,10 @@ import { MarqueeRow } from './MarqueeRow';
 import { SectionLabel } from '@/components/chrome/SectionLabel';
 import { TornEdge } from '@/components/chrome/marks/TornEdge';
 import { stack } from '@/data/stack';
-import { gsap, useGSAP, ScrollTrigger } from '@/lib/gsap';
+import { gsap, useGSAP } from '@/lib/gsap';
 import { E } from '@/lib/motion';
 import { horizontalLoop } from '@/lib/horizontalLoop';
 import { prefersReducedMotion } from '@/lib/reduced-motion';
-
-/** How hard scroll speed pushes the rows, and how far it can push them. */
-const VELOCITY_DIVISOR = 320;
-const MAX_BOOST = 6;
-const SETTLE_DELAY = 0.15;
 
 export function StackMarquee() {
   const scope = useRef<HTMLElement>(null);
@@ -34,45 +29,6 @@ export function StackMarquee() {
         return loop;
       });
 
-      let hovered: number | null = null;
-
-      const settle = gsap
-        .delayedCall(SETTLE_DELAY, () => {
-          loops.forEach((loop, i) => {
-            if (i === hovered) return;
-            gsap.to(loop, { timeScale: idle(i), duration: 0.9, ease: E.out, overwrite: true });
-          });
-        })
-        .pause();
-
-      ScrollTrigger.create({
-        trigger: scope.current,
-        start: 'top bottom',
-        end: 'bottom top',
-        onUpdate: (self) => {
-          // Scroll down and the rows surge along their own direction; scroll
-          // up hard enough and they run backwards. Stop and they drift home.
-          const boost = gsap.utils.clamp(
-            -MAX_BOOST,
-            MAX_BOOST,
-            self.getVelocity() / VELOCITY_DIVISOR,
-          );
-          const sign = boost < 0 ? -1 : 1;
-
-          loops.forEach((loop, i) => {
-            if (i === hovered) return;
-            gsap.to(loop, {
-              timeScale: idle(i) * sign * (1 + Math.abs(boost)),
-              duration: 0.2,
-              ease: E.none,
-              overwrite: true,
-            });
-          });
-
-          settle.restart(true);
-        },
-      });
-
       // Slow the row under the pointer enough to read it. Pointer only — this
       // must never fire on a touch device, where it would stick.
       if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -81,19 +37,15 @@ export function StackMarquee() {
         const row = track?.closest('.marquee');
         if (!row) return;
 
-        const slow = () => {
-          hovered = i;
+        const slow = () =>
           gsap.to(loops[i], {
             timeScale: idle(i) * 0.25,
             duration: 0.4,
             ease: E.out,
             overwrite: true,
           });
-        };
-        const resume = () => {
-          hovered = null;
+        const resume = () =>
           gsap.to(loops[i], { timeScale: idle(i), duration: 0.6, ease: E.out, overwrite: true });
-        };
 
         row.addEventListener('pointerenter', slow);
         row.addEventListener('pointerleave', resume);
