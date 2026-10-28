@@ -76,6 +76,10 @@ export const stack: readonly StackRow[] = [
       { label: 'ServiceDesk Plus', tile: 'SD' },
       { label: 'Power Automate', tile: 'PA' },
       { label: 'VS Code', tile: 'VS' },
+      // The AWS marks are wordmarks too, and Bedrock has none at all.
+      { label: 'AWS Lambda', tile: 'LA' },
+      { label: 'Amazon Bedrock', tile: 'BR' },
+      { label: 'API Gateway', tile: 'AG' },
     ],
   },
 ];

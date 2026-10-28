@@ -26,20 +26,29 @@ export type Project = {
 export const projects: readonly Project[] = [
   {
     n: '01',
-    slug: 'ARTMS',
-    title: 'ARTMS Website (Fan Project)',
+    slug: 'Now Serving',
+    title: 'Now Serving',
     year: '2026',
-    plain: 'A fan-made archive for the group ARTMS, built as one long scroll through three eras.',
+    plain:
+      'Answers questions about Philippine passport and PSA birth certificate applications, and links where every answer came from.',
     does: [
-      'One scroll through three eras of the group.',
-      'Media processed at build time to keep it fast.',
+      'Answers only from ten articles I wrote and checked.',
+      'Refuses anything out of scope instead of guessing.',
     ],
-    stack: ['Vite', 'React 19', 'TypeScript', 'Tailwind v4', 'GSAP', 'Lenis', 'sharp', 'ffmpeg'],
+    stack: [
+      'Python',
+      'AWS Lambda',
+      'Amazon Bedrock',
+      'API Gateway',
+      'AWS SAM',
+      'S3 Vectors',
+      'JavaScript',
+    ],
     links: {
-      live: 'https://artms-website.vercel.app',
-      source: 'https://github.com/danil-tzn31/ARTMS-Website',
+      live: 'https://danil-tzn31.github.io/Now-Serving/',
+      source: 'https://github.com/danil-tzn31/Now-Serving',
     },
-    plate: 'artms',
+    plate: 'nowserving',
   },
   {
     n: '02',

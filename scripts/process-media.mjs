@@ -24,7 +24,7 @@ const OUT = path.join('public', 'media');
 const ALL = ['plate', 'halftone', 'thumb'];
 
 const SOURCES = [
-  { file: 'artms.png', name: 'artms' },
+  { file: 'nowserving.png', name: 'nowserving' },
   { file: 'moodtune.png', name: 'moodtune' },
   { file: 'halina.png', name: 'halina' },
   { file: 'lasso scatterplot.png', name: 'watch', crop: [250, 12, 1670, 1050], ink: null },
