@@ -34,6 +34,15 @@ export const E = {
   inOut: 'power3.inOut',
   /** Long two-sided moves. power3.inOut whips at this length. */
   even: 'power1.inOut',
+  /**
+   * Something heavy leaving the frame. It never lands, so it never slows
+   * down: the fastest moment is the last one, as it goes off screen.
+   *
+   * `power1` is the quadratic, not the cubic — GSAP's numbering is one behind
+   * the degree. `power2.in` here would put only 13% of the distance in the
+   * first half of the move, which reads as a stall rather than as weight.
+   */
+  lift: 'power1.in',
   /** Rules and strokes drawing themselves. */
   draw: 'expo.out',
   /** Rubber stamp: overshoot, then set. */
