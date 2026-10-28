@@ -28,6 +28,4 @@ next-env.d.ts
 # working notes, not part of the site
 BUILD-PLAN.md
 
-# written by `next dev` on every run, not authored
-AGENTS.md
-CLAUDE.md
+
