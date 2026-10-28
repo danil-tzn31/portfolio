@@ -15,7 +15,10 @@ export function ScanBand({ ref }: { ref?: Ref<HTMLSpanElement> }) {
 
 /**
  * `swap` runs at full cover, on the frame where nothing is visible. It must be
- * synchronous — anything deferred lands after the band has started to leave.
+ * synchronous, and it must be the whole change: the band is the only
+ * transition in this section, so nothing may still be animating once it has
+ * gone. Anything that eases the new content in reads as a second transition
+ * crossing the first.
  */
 export function scanWipe(band: HTMLElement, swap: () => void) {
   return gsap

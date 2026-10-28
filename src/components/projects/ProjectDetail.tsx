@@ -30,18 +30,7 @@ export function ProjectDetail({ project }: { project: Project }) {
           alt=""
           fill
           sizes="(min-width: 1024px) 58vw, 100vw"
-          className={`detail__plate ${fit}`}
-        />
-        {/* Unoptimized on purpose: this is a two-colour PNG, and putting a
-            1-bit dither through a lossy re-encode both blurs the screen and
-            comes out larger than the file already committed. */}
-        <Image
-          src={`/media/${project.plate}-halftone.png`}
-          alt=""
-          fill
-          unoptimized
-          sizes="(min-width: 1024px) 58vw, 100vw"
-          className={`detail__halftone ${fit}`}
+          className={fit}
         />
         <CornerTicks className="text-ink" />
       </div>

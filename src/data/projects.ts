@@ -13,7 +13,7 @@ export type Project = {
   does: readonly [string, string];
   stack: readonly string[];
   links: { live?: string; source: string };
-  /** Basename in public/media of the plate, halftone and thumbnail. */
+  /** Basename in public/media of the plate and the contact-sheet thumbnail. */
   plate: string;
   /**
    * A plot rather than a screenshot. It is fitted whole instead of cropped

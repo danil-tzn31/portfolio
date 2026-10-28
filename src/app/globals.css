@@ -433,11 +433,6 @@ html.is-loading body {
     height: clamp(11rem, 42vw, 22rem);
   }
 
-  /* Nothing resolves it, so the screen would sit on the plate for good. */
-  .detail__halftone {
-    display: none;
-  }
-
   /* There is no loupe to count frames for. */
   .projects__counter {
     display: none;

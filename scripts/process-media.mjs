@@ -3,9 +3,9 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 /**
- * Turns the raw project screenshots into the two states the projects section
- * uses: a greyscale plate, and a 1-bit halftone that resolves into it. Run by
- * hand; the output is committed.
+ * Screens the raw sources for the site: a greyscale plate for the detail
+ * panel, a 1-bit halftone for the contact-sheet thumbnails, and the portrait,
+ * which is only ever a halftone. Run by hand; the output is committed.
  *
  *   node scripts/process-media.mjs ["../portfolio media resources"]
  */
@@ -17,11 +17,12 @@ const OUT = path.join('public', 'media');
  * two plots, which are not site media.
  *
  * `crop` is [left, top, width, height] in source pixels. `out` names the files
- * to write — the portrait never resolves and is never on the contact sheet, so
- * it only needs the screen. `ink` is the thumbnail's target coverage; `null`
- * exposes it as line art instead (see THUMB_INK).
+ * to write: a project needs the plate it shows and the screened thumbnail for
+ * the contact sheet, while the portrait is only ever the screen. `ink` is the
+ * thumbnail's target coverage; `null` exposes it as line art instead (see
+ * THUMB_INK).
  */
-const ALL = ['plate', 'halftone', 'thumb'];
+const ALL = ['plate', 'thumb'];
 
 const SOURCES = [
   { file: 'nowserving.png', name: 'nowserving' },
@@ -31,7 +32,7 @@ const SOURCES = [
   { file: 'profile.jpg', name: 'portrait', crop: [276, 190, 648, 810], out: ['halftone'] },
 ];
 
-/** Greyscale plate: the resolved state, behind the halftone. */
+/** Greyscale plate: what the detail panel shows. */
 const PLATE_WIDTH = 2000;
 
 const SCREEN_WIDTH = 1600;

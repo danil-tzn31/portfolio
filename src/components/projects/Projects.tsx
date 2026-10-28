@@ -87,25 +87,12 @@ export function Projects() {
           sheet.classList.add('is-measured');
         };
 
-        const resolve = (panel: HTMLElement) => {
-          const halftone = panel.querySelector('.detail__halftone');
-          const plate = panel.querySelector('.detail__plate');
-
-          if (halftone) {
-            gsap.fromTo(halftone, { opacity: 1 }, { opacity: 0, duration: D.base, ease: E.settle });
-          }
-          if (plate) {
-            gsap.fromTo(plate, { scale: 1.03 }, { scale: 1, duration: D.slow, ease: E.settle });
-          }
-        };
-
         const show = (i: number) => {
           gsap.set(panels, { autoAlpha: 0 });
           gsap.set(panels[i], { autoAlpha: 1 });
           frames.forEach((frame, k) => frame.classList.toggle('is-active', k === i));
           if (counter) counter.textContent = projects[i].n;
           if (loupeN) loupeN.textContent = projects[i].n;
-          resolve(panels[i]);
         };
 
         measure();
